@@ -1,0 +1,1198 @@
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 9908b43..4d28f89 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -493,6 +493,10 @@ config TARGET_MX53LOCO
+ 	bool "Support mx53loco"
+ 	select CPU_V7
+ 
++config TARGET_MX53CX9020
++	bool "Support mx53cx9020"
++	select CPU_V7
++
+ config TARGET_MX53SMD
+ 	bool "Support mx53smd"
+ 	select CPU_V7
+@@ -914,6 +918,7 @@ source "board/freescale/mx51evk/Kconfig"
+ source "board/freescale/mx53ard/Kconfig"
+ source "board/freescale/mx53evk/Kconfig"
+ source "board/freescale/mx53loco/Kconfig"
++source "board/beckhoff/mx53cx9020/Kconfig"
+ source "board/freescale/mx53smd/Kconfig"
+ source "board/freescale/mx6qarm2/Kconfig"
+ source "board/freescale/mx6qsabreauto/Kconfig"
+diff --git a/board/beckhoff/mx53cx9020/Kconfig b/board/beckhoff/mx53cx9020/Kconfig
+new file mode 100644
+index 0000000..6b60ce3
+--- /dev/null
++++ b/board/beckhoff/mx53cx9020/Kconfig
+@@ -0,0 +1,15 @@
++if TARGET_MX53CX9020
++
++config SYS_BOARD
++	default "mx53cx9020"
++
++config SYS_VENDOR
++	default "beckhoff"
++
++config SYS_SOC
++	default "mx5"
++
++config SYS_CONFIG_NAME
++	default "mx53cx9020"
++
++endif
+diff --git a/board/beckhoff/mx53cx9020/MAINTAINERS b/board/beckhoff/mx53cx9020/MAINTAINERS
+new file mode 100644
+index 0000000..f84413e
+--- /dev/null
++++ b/board/beckhoff/mx53cx9020/MAINTAINERS
+@@ -0,0 +1,6 @@
++MX53 CX9020
++M:	Patrick Bruenn <p.bruenn@beckhoff.com>
++S:	Maintained
++F:	board/beckhoff/mx53cx9020/
++F:	include/configs/mx53cx9020.h
++F:	configs/mx53cx9020_defconfig
+diff --git a/board/beckhoff/mx53cx9020/Makefile b/board/beckhoff/mx53cx9020/Makefile
+new file mode 100644
+index 0000000..a01c0f1
+--- /dev/null
++++ b/board/beckhoff/mx53cx9020/Makefile
+@@ -0,0 +1,9 @@
++#
++# Copyright (C) 2015  Beckhoff Automation GmbH & Co. KG
++# Patrick Bruenn <p.bruenn@beckhoff.com>
++#
++# SPDX-License-Identifier:	GPL-2.0+
++#
++
++obj-y               += mx53cx9020.o
++obj-$(CONFIG_VIDEO) += mx53cx9020_video.o
+diff --git a/board/beckhoff/mx53cx9020/imximage.cfg b/board/beckhoff/mx53cx9020/imximage.cfg
+new file mode 100644
+index 0000000..c6bdc72
+--- /dev/null
++++ b/board/beckhoff/mx53cx9020/imximage.cfg
+@@ -0,0 +1,82 @@
++/*
++ * Copyright (C) 2015  Beckhoff Automation GmbH
++ * Patrick Bruenn <p.bruenn@beckhoff.com>
++ *
++ * Based on Freescale's Linux i.MX mx53loco/imximage.cfg file:
++ * Copyright (C) 2011 Freescale Semiconductor, Inc.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++/* image version */
++IMAGE_VERSION 2
++
++/*
++ * Boot Device : one of
++ * spi, sd (the board has no nand neither onenand)
++ */
++BOOT_FROM	sd
++
++/*
++ * Device Configuration Data (DCD)
++ *
++ * Each entry must have the format:
++ * Addr-type           Address        Value
++ *
++ * where:
++ *	Addr-type register length (1,2 or 4 bytes)
++ *	Address	  absolute address of the register
++ *	value	  value to be stored in the register
++ */
++DATA 4 0x53fa8554 0x00300000
++DATA 4 0x53fa8558 0x00300040
++DATA 4 0x53fa8560 0x00300000
++DATA 4 0x53fa8564 0x00300040
++DATA 4 0x53fa8568 0x00300040
++DATA 4 0x53fa8570 0x00300000
++DATA 4 0x53fa8574 0x00300000
++DATA 4 0x53fa8578 0x00300000
++DATA 4 0x53fa857c 0x00300040
++DATA 4 0x53fa8580 0x00300040
++DATA 4 0x53fa8584 0x00300000
++DATA 4 0x53fa8588 0x00300000
++DATA 4 0x53fa8590 0x00300040
++DATA 4 0x53fa8594 0x00300000
++DATA 4 0x53fa86f0 0x00300000
++DATA 4 0x53fa86f4 0x00000000
++DATA 4 0x53fa86fc 0x00000000
++DATA 4 0x53fa8714 0x00000000
++DATA 4 0x53fa8718 0x00300000
++DATA 4 0x53fa871c 0x00300000
++DATA 4 0x53fa8720 0x00300000
++DATA 4 0x53fa8724 0x00000000
++DATA 4 0x53fa8728 0x00300000
++DATA 4 0x53fa872c 0x00300000
++DATA 4 0x63fd9088 0x35343535
++DATA 4 0x63fd9090 0x4d444c44
++DATA 4 0x63fd907c 0x01370138
++DATA 4 0x63fd9080 0x013b013c
++DATA 4 0x63fd9018 0x00011740
++DATA 4 0x63fd9000 0x83190000
++DATA 4 0x63fd900c 0x40425333
++DATA 4 0x63fd9010 0xb68e8a63
++DATA 4 0x63fd9014 0x01ff00db
++DATA 4 0x63fd902c 0x000026d2
++DATA 4 0x63fd9030 0x009f0e21
++DATA 4 0x63fd9008 0x12273030
++DATA 4 0x63fd9004 0x0002002d
++DATA 4 0x63fd901c 0x00008032
++DATA 4 0x63fd901c 0x00008033
++DATA 4 0x63fd901c 0x00028031
++DATA 4 0x63fd901c 0x052080b0
++DATA 4 0x63fd901c 0x04008040
++DATA 4 0x63fd9000 0xc3190000
++DATA 4 0x63fd901c 0x0000803a
++DATA 4 0x63fd901c 0x0000803b
++DATA 4 0x63fd901c 0x00028039
++DATA 4 0x63fd901c 0x05208138
++DATA 4 0x63fd901c 0x04008048
++DATA 4 0x63fd9020 0x00005800
++DATA 4 0x63fd9040 0x05380003
++DATA 4 0x63fd9058 0x00022227
++DATA 4 0x63fd901c 0x00000000
+diff --git a/board/beckhoff/mx53cx9020/mx53cx9020.c b/board/beckhoff/mx53cx9020/mx53cx9020.c
+new file mode 100644
+index 0000000..7290856
+--- /dev/null
++++ b/board/beckhoff/mx53cx9020/mx53cx9020.c
+@@ -0,0 +1,565 @@
++/*
++ * Copyright (C) 2015  Beckhoff Automation GmbH & Co. KG
++ * Patrick Bruenn <p.bruenn@beckhoff.com>
++ *
++ * Based on Freescale's Linux i.MX mx53loco.c file:
++ * Copyright (C) 2011 Freescale Semiconductor, Inc.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#include <common.h>
++#include <asm/io.h>
++#include <asm/arch/imx-regs.h>
++#include <asm/arch/sys_proto.h>
++#include <asm/arch/crm_regs.h>
++#include <asm/arch/clock.h>
++#include <asm/arch/iomux-mx53.h>
++#include <asm/arch/clock.h>
++#include <asm/errno.h>
++#include <asm/imx-common/mx5_video.h>
++#include <netdev.h>
++#include <i2c.h>
++#include <mmc.h>
++#include <fsl_esdhc.h>
++#include <asm/gpio.h>
++#include <power/pmic.h>
++#include <dialog_pmic.h>
++#include <fsl_pmic.h>
++#include <linux/fb.h>
++#include <ipu_pixfmt.h>
++#include <fs.h>
++
++enum LED_GPIOS {
++	GPIO_SD1_CD = IMX_GPIO_NR(1, 1),
++	GPIO_SD2_CD = IMX_GPIO_NR(1, 4),
++	GPIO_LED_SD2_R = IMX_GPIO_NR(3, 16),
++	GPIO_LED_SD2_B = IMX_GPIO_NR(3, 17),
++	GPIO_LED_SD2_G = IMX_GPIO_NR(3, 18),
++	GPIO_LED_SD1_R = IMX_GPIO_NR(3, 19),
++	GPIO_LED_SD1_B = IMX_GPIO_NR(3, 20),
++	GPIO_LED_SD1_G = IMX_GPIO_NR(3, 21),
++	GPIO_LED_PWR_R = IMX_GPIO_NR(3, 22),
++	GPIO_LED_PWR_B = IMX_GPIO_NR(3, 23),
++	GPIO_LED_PWR_G = IMX_GPIO_NR(3, 24),
++	GPIO_SUPS_INT = IMX_GPIO_NR(3, 31),
++	GPIO_C3_CONFIG = IMX_GPIO_NR(6, 8),
++	GPIO_C3_STATUS = IMX_GPIO_NR(6, 7),
++	GPIO_C3_DONE = IMX_GPIO_NR(6, 9),
++};
++
++#define CCAT_BASE_ADDR ((void*)0xf0000000)
++#define CCAT_END_ADDR (CCAT_BASE_ADDR + (1024 * 1024 * 32))
++#define CCAT_SIGNATURE_ADDR (CCAT_BASE_ADDR + 12)
++static const char CCAT_SIGNATURE[] = "CCAT";
++
++static const u32 CCAT_MODE_CONFIG = 0x0024DC81;
++static const u32 CCAT_MODE_RUN = 0x0033DC8F;
++
++DECLARE_GLOBAL_DATA_PTR;
++
++static uint32_t mx53_dram_size[2];
++
++phys_size_t get_effective_memsize(void)
++{
++	/*
++	 * WARNING: We must override get_effective_memsize() function here
++	 * to report only the size of the first DRAM bank. This is to make
++	 * U-Boot relocator place U-Boot into valid memory, that is, at the
++	 * end of the first DRAM bank. If we did not override this function
++	 * like so, U-Boot would be placed at the address of the first DRAM
++	 * bank + total DRAM size - sizeof(uboot), which in the setup where
++	 * each DRAM bank contains 512MiB of DRAM would result in placing
++	 * U-Boot into invalid memory area close to the end of the first
++	 * DRAM bank.
++	 */
++	return mx53_dram_size[0];
++}
++
++int dram_init(void)
++{
++	mx53_dram_size[0] = get_ram_size((void *)PHYS_SDRAM_1, 1 << 30);
++	mx53_dram_size[1] = get_ram_size((void *)PHYS_SDRAM_2, 1 << 30);
++
++	gd->ram_size = mx53_dram_size[0] + mx53_dram_size[1];
++
++	return 0;
++}
++
++void dram_init_banksize(void)
++{
++	gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
++	gd->bd->bi_dram[0].size = mx53_dram_size[0];
++
++	gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
++	gd->bd->bi_dram[1].size = mx53_dram_size[1];
++}
++
++u32 get_board_rev(void)
++{
++	struct iim_regs *iim = (struct iim_regs *)IMX_IIM_BASE;
++	struct fuse_bank *bank = &iim->bank[0];
++	struct fuse_bank0_regs *fuse =
++	    (struct fuse_bank0_regs *)bank->fuse_regs;
++
++	int rev = readl(&fuse->gp[6]);
++
++	if (!i2c_probe(CONFIG_SYS_DIALOG_PMIC_I2C_ADDR))
++		rev = 0;
++
++	return (get_cpu_rev() & ~(0xF << 8)) | (rev & 0xF) << 8;
++}
++
++/*
++ * Set CCAT mode
++ * @mode: use CCAT_MODE_CONFIG or CCAT_MODE_RUN
++ */
++void weim_cs0_settings(u32 mode)
++{
++	struct weim *weim_regs = (struct weim *)WEIM_BASE_ADDR;
++
++	writel(0x0, &weim_regs->cs0gcr1);
++	writel(mode, &weim_regs->cs0gcr1);
++	writel(0x00001002, &weim_regs->cs0gcr2);
++
++	writel(0x04000000, &weim_regs->cs0rcr1);
++	writel(0x00000000, &weim_regs->cs0rcr2);
++
++	writel(0x04000000, &weim_regs->cs0wcr1);
++	writel(0x00000000, &weim_regs->cs0wcr2);
++}
++
++static void setup_iomux_eim(void)
++{
++	static const iomux_v3_cfg_t eim_pads[] = {
++		NEW_PAD_CTRL(MX53_PAD_EIM_OE__EMI_WEIM_OE,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_WAIT__EMI_WEIM_WAIT,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_LBA__EMI_WEIM_LBA,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_RW__EMI_WEIM_RW,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_EB0__EMI_WEIM_EB_0,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_EB1__EMI_WEIM_EB_1,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_EB2__EMI_WEIM_EB_2,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_EB3__EMI_WEIM_EB_3,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_CS0__EMI_WEIM_CS_0,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_CS1__EMI_WEIM_CS_1,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_A16__EMI_WEIM_A_16,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_A17__EMI_WEIM_A_17,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_A18__EMI_WEIM_A_18,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_A19__EMI_WEIM_A_19,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_A20__EMI_WEIM_A_20,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_A21__EMI_WEIM_A_21,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_A22__EMI_WEIM_A_22,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA0__EMI_NAND_WEIM_DA_0,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA1__EMI_NAND_WEIM_DA_1,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA2__EMI_NAND_WEIM_DA_2,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA3__EMI_NAND_WEIM_DA_3,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA4__EMI_NAND_WEIM_DA_4,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA5__EMI_NAND_WEIM_DA_5,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA6__EMI_NAND_WEIM_DA_6,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA7__EMI_NAND_WEIM_DA_7,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA8__EMI_NAND_WEIM_DA_8,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA9__EMI_NAND_WEIM_DA_9,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA10__EMI_NAND_WEIM_DA_10,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA11__EMI_NAND_WEIM_DA_11,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA12__EMI_NAND_WEIM_DA_12,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA13__EMI_NAND_WEIM_DA_13,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA14__EMI_NAND_WEIM_DA_14,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_EIM_DA15__EMI_NAND_WEIM_DA_15,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA0__EMI_NANDF_D_0,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA1__EMI_NANDF_D_1,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA2__EMI_NANDF_D_2,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA3__EMI_NANDF_D_3,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA4__EMI_NANDF_D_4,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA5__EMI_NANDF_D_5,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA6__EMI_NANDF_D_6,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA7__EMI_NANDF_D_7,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA8__EMI_NANDF_D_8,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA9__EMI_NANDF_D_9,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA10__EMI_NANDF_D_10,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA11__EMI_NANDF_D_11,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA12__EMI_NANDF_D_12,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA13__EMI_NANDF_D_13,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA14__EMI_NANDF_D_14,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_PATA_DATA15__EMI_NANDF_D_15,
++			     PAD_CTL_PKE | PAD_CTL_DSE_HIGH),
++	};
++	imx_iomux_v3_setup_multiple_pads(eim_pads, ARRAY_SIZE(eim_pads));
++
++	imx_iomux_v3_setup_pad(MX53_PAD_NANDF_CLE__GPIO6_7);
++	gpio_direction_input(GPIO_C3_STATUS);
++	imx_iomux_v3_setup_pad(MX53_PAD_NANDF_WP_B__GPIO6_9);
++	gpio_direction_input(GPIO_C3_DONE);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_NANDF_ALE__GPIO6_8);
++	gpio_direction_output(GPIO_C3_CONFIG, 1);
++
++	weim_cs0_settings(CCAT_MODE_RUN);
++}
++
++static void setup_iomux_sups(void)
++{
++	imx_iomux_v3_setup_pad(NEW_PAD_CTRL
++			       (MX53_PAD_EIM_D31__GPIO3_31,
++				PAD_CTL_PUS_100K_DOWN));
++	gpio_direction_input(GPIO_SUPS_INT);
++
++	static const int BLINK_INTERVALL = 50000;
++	int status = 1;
++	while (gpio_get_value(GPIO_SUPS_INT)) {
++		/* signal "CX SUPS power fail" */
++		gpio_set_value(GPIO_LED_PWR_R,
++			       (++status / BLINK_INTERVALL) % 2);
++	}
++
++	/* signal "CX power up" */
++	gpio_set_value(GPIO_LED_PWR_R, 1);
++}
++
++static void setup_iomux_leds(void)
++{
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D16__GPIO3_16);
++	gpio_direction_output(GPIO_LED_SD2_R, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D17__GPIO3_17);
++	gpio_direction_output(GPIO_LED_SD2_B, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D18__GPIO3_18);
++	gpio_direction_output(GPIO_LED_SD2_G, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D19__GPIO3_19);
++	gpio_direction_output(GPIO_LED_SD1_R, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D20__GPIO3_20);
++	gpio_direction_output(GPIO_LED_SD1_B, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D21__GPIO3_21);
++	gpio_direction_output(GPIO_LED_SD1_G, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D22__GPIO3_22);
++	gpio_direction_output(GPIO_LED_PWR_R, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D23__GPIO3_23);
++	gpio_direction_output(GPIO_LED_PWR_B, 0);
++
++	imx_iomux_v3_setup_pad(MX53_PAD_EIM_D24__GPIO3_24);
++	gpio_direction_output(GPIO_LED_PWR_G, 0);
++}
++
++#define UART_PAD_CTRL	(PAD_CTL_HYS | PAD_CTL_DSE_HIGH | \
++			 PAD_CTL_PUS_100K_UP | PAD_CTL_ODE)
++
++static void setup_iomux_uart(void)
++{
++	static const iomux_v3_cfg_t uart_pads[] = {
++		NEW_PAD_CTRL(MX53_PAD_EIM_D27__UART2_RXD_MUX, UART_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_EIM_D26__UART2_TXD_MUX, UART_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_EIM_D28__UART2_CTS, UART_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_EIM_D29__UART2_RTS, UART_PAD_CTRL),
++	};
++
++	imx_iomux_v3_setup_multiple_pads(uart_pads, ARRAY_SIZE(uart_pads));
++}
++
++#ifdef CONFIG_USB_EHCI_MX5
++int board_ehci_hcd_init(int port)
++{
++	/* request VBUS power enable pin, GPIO7_8 */
++	imx_iomux_v3_setup_pad(MX53_PAD_PATA_DA_2__GPIO7_8);
++	gpio_direction_output(IMX_GPIO_NR(7, 8), 1);
++	return 0;
++}
++#endif
++
++static void setup_iomux_fec(void)
++{
++	static const iomux_v3_cfg_t fec_pads[] = {
++		NEW_PAD_CTRL(MX53_PAD_FEC_MDIO__FEC_MDIO, PAD_CTL_HYS |
++			     PAD_CTL_DSE_HIGH | PAD_CTL_PUS_22K_UP |
++			     PAD_CTL_ODE),
++		NEW_PAD_CTRL(MX53_PAD_FEC_MDC__FEC_MDC, PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_FEC_RXD1__FEC_RDATA_1,
++			     PAD_CTL_HYS | PAD_CTL_PKE),
++		NEW_PAD_CTRL(MX53_PAD_FEC_RXD0__FEC_RDATA_0,
++			     PAD_CTL_HYS | PAD_CTL_PKE),
++		NEW_PAD_CTRL(MX53_PAD_FEC_TXD1__FEC_TDATA_1, PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_FEC_TXD0__FEC_TDATA_0, PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_FEC_TX_EN__FEC_TX_EN, PAD_CTL_DSE_HIGH),
++		NEW_PAD_CTRL(MX53_PAD_FEC_REF_CLK__FEC_TX_CLK,
++			     PAD_CTL_HYS | PAD_CTL_PKE),
++		NEW_PAD_CTRL(MX53_PAD_FEC_RX_ER__FEC_RX_ER,
++			     PAD_CTL_HYS | PAD_CTL_PKE),
++		NEW_PAD_CTRL(MX53_PAD_FEC_CRS_DV__FEC_RX_DV,
++			     PAD_CTL_HYS | PAD_CTL_PKE),
++	};
++
++	imx_iomux_v3_setup_multiple_pads(fec_pads, ARRAY_SIZE(fec_pads));
++}
++
++#ifdef CONFIG_FSL_ESDHC
++struct fsl_esdhc_cfg esdhc_cfg[2] = {
++	{MMC_SDHC1_BASE_ADDR},
++	{MMC_SDHC2_BASE_ADDR},
++};
++
++int board_mmc_getcd(struct mmc *mmc)
++{
++	struct fsl_esdhc_cfg *cfg = (struct fsl_esdhc_cfg *)mmc->priv;
++	int ret;
++
++	imx_iomux_v3_setup_pad(MX53_PAD_GPIO_1__GPIO1_1);
++	gpio_direction_input(GPIO_SD1_CD);
++	imx_iomux_v3_setup_pad(MX53_PAD_GPIO_4__GPIO1_4);
++	gpio_direction_input(GPIO_SD2_CD);
++
++	if (cfg->esdhc_base == MMC_SDHC1_BASE_ADDR)
++		ret = !gpio_get_value(GPIO_SD1_CD);
++	else
++		ret = !gpio_get_value(GPIO_SD2_CD);
++
++	return ret;
++}
++
++#define SD_CMD_PAD_CTRL		(PAD_CTL_HYS | PAD_CTL_DSE_HIGH | \
++				 PAD_CTL_PUS_100K_UP)
++#define SD_PAD_CTRL		(PAD_CTL_HYS | PAD_CTL_PUS_47K_UP | \
++				 PAD_CTL_DSE_HIGH)
++
++int board_mmc_init(bd_t * bis)
++{
++	static const iomux_v3_cfg_t sd1_pads[] = {
++		NEW_PAD_CTRL(MX53_PAD_SD1_CMD__ESDHC1_CMD, SD_CMD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD1_CLK__ESDHC1_CLK, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD1_DATA0__ESDHC1_DAT0, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD1_DATA1__ESDHC1_DAT1, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD1_DATA2__ESDHC1_DAT2, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD1_DATA3__ESDHC1_DAT3, SD_PAD_CTRL),
++		MX53_PAD_GPIO_1__GPIO1_1,
++	};
++
++	static const iomux_v3_cfg_t sd2_pads[] = {
++		NEW_PAD_CTRL(MX53_PAD_SD2_CMD__ESDHC2_CMD, SD_CMD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD2_CLK__ESDHC2_CLK, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD2_DATA0__ESDHC2_DAT0, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD2_DATA1__ESDHC2_DAT1, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD2_DATA2__ESDHC2_DAT2, SD_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_SD2_DATA3__ESDHC2_DAT3, SD_PAD_CTRL),
++		MX53_PAD_GPIO_4__GPIO1_4,
++	};
++
++	u32 index;
++	int ret;
++
++	esdhc_cfg[0].sdhc_clk = mxc_get_clock(MXC_ESDHC_CLK);
++	esdhc_cfg[1].sdhc_clk = mxc_get_clock(MXC_ESDHC2_CLK);
++
++	for (index = 0; index < CONFIG_SYS_FSL_ESDHC_NUM; index++) {
++		switch (index) {
++		case 0:
++			imx_iomux_v3_setup_multiple_pads(sd1_pads,
++							 ARRAY_SIZE(sd1_pads));
++			break;
++		case 1:
++			imx_iomux_v3_setup_multiple_pads(sd2_pads,
++							 ARRAY_SIZE(sd2_pads));
++			break;
++		default:
++			printf("Warning: you configured more ESDHC controller"
++			       "(%d) as supported by the board(2)\n",
++			       CONFIG_SYS_FSL_ESDHC_NUM);
++			return -EINVAL;
++		}
++		ret = fsl_esdhc_initialize(bis, &esdhc_cfg[index]);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++#endif
++
++#define I2C_PAD_CTRL	(PAD_CTL_SRE_FAST | PAD_CTL_DSE_HIGH | \
++			 PAD_CTL_PUS_100K_UP | PAD_CTL_ODE)
++
++static void setup_iomux_i2c(void)
++{
++	static const iomux_v3_cfg_t i2c1_pads[] = {
++		NEW_PAD_CTRL(MX53_PAD_CSI0_DAT8__I2C1_SDA, I2C_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_CSI0_DAT9__I2C1_SCL, I2C_PAD_CTRL),
++	};
++
++	imx_iomux_v3_setup_multiple_pads(i2c1_pads, ARRAY_SIZE(i2c1_pads));
++}
++
++static int power_init(void)
++{
++	/* nothing to do on CX9020 */
++	return 0;
++}
++
++static void clock_1GHz(void)
++{
++	int ret;
++	u32 ref_clk = MXC_HCLK;
++	/*
++	 * After increasing voltage to 1.25V, we can switch
++	 * CPU clock to 1GHz and DDR to 400MHz safely
++	 */
++	ret = mxc_set_clock(ref_clk, 1000, MXC_ARM_CLK);
++	if (ret)
++		printf("CPU:   Switch CPU clock to 1GHZ failed\n");
++
++	ret = mxc_set_clock(ref_clk, 400, MXC_PERIPH_CLK);
++	ret |= mxc_set_clock(ref_clk, 400, MXC_DDR_CLK);
++	if (ret)
++		printf("CPU:   Switch DDR clock to 400MHz failed\n");
++}
++
++int board_early_init_f(void)
++{
++	setup_iomux_leds();
++	setup_iomux_sups();
++	setup_iomux_uart();
++	setup_iomux_fec();
++	setup_iomux_eim();
++	setup_iomux_lcd();
++
++	return 0;
++}
++
++/*
++ * Do not overwrite the console
++ * Use always serial for U-Boot console
++ */
++int overwrite_console(void)
++{
++	return 1;
++}
++
++int board_init(void)
++{
++	gd->bd->bi_boot_params = PHYS_SDRAM_1 + 0x100;
++
++	mxc_set_sata_internal_clock();
++	setup_iomux_i2c();
++
++	return 0;
++}
++
++int board_late_init(void)
++{
++	if (!power_init())
++		clock_1GHz();
++
++	return 0;
++}
++
++int checkboard(void)
++{
++	puts("Board: Beckhoff CX9020\n");
++
++	return 0;
++}
++
++int do_load_ccat(cmd_tbl_t * cmdtp, int flag, int argc, char *const argv[])
++{
++	unsigned char *buffer = (void *)simple_strtoul(argv[3], NULL, 16);
++	const int status = do_load(cmdtp, flag, 5, argv, FS_TYPE_ANY);
++	const ulong buf_len = getenv_hex("filesize", 0);
++	if (status || !buffer || !buf_len) {
++		printf("Unable to read CCAT firmware from '%s'\n", argv[4]);
++		return status;
++	}
++
++	/* prepare FPGA for programming */
++	weim_cs0_settings(CCAT_MODE_CONFIG);
++	gpio_set_value(GPIO_C3_CONFIG, 0);
++	udelay(1);
++	gpio_set_value(GPIO_C3_CONFIG, 1);
++	udelay(230);
++
++	/* program CCAT */
++	int i;
++	for (i = 0; i < buf_len; ++i) {
++		writeb(buffer[i], CCAT_BASE_ADDR);
++	}
++	writeb(0xff, CCAT_BASE_ADDR);
++	writeb(0xff, CCAT_BASE_ADDR);
++
++	/* programming complete? */
++	if (!gpio_get_value(GPIO_C3_DONE)) {
++		printf("Programming CCAT firmware failed, C3_DONE not ready\n");
++		return -1;
++	}
++
++	/* switch to FPGA run mode */
++	weim_cs0_settings(CCAT_MODE_RUN);
++	invalidate_dcache_range((ulong) CCAT_BASE_ADDR, (ulong) CCAT_END_ADDR);
++
++	if (memcmp
++	    (CCAT_SIGNATURE_ADDR, CCAT_SIGNATURE,
++	     sizeof(CCAT_SIGNATURE_ADDR))) {
++		printf
++		    ("Verifing CCAT firmware failed, signature '%s' not found\n",
++		     CCAT_SIGNATURE);
++		return -1;
++	}
++
++	/* signal "CX booting OS" */
++	gpio_set_value(GPIO_LED_PWR_R, 1);
++	gpio_set_value(GPIO_LED_PWR_G, 1);
++	gpio_set_value(GPIO_LED_PWR_B, 0);
++	return 0;
++}
++
++U_BOOT_CMD(loadccat, 5, 1, do_load_ccat,
++	   "loads ccat firmware",
++	   "<interface> <dev[:part]> <addr> <filename>\n"
++	   "    - write FPGA firmware from 'dev' on 'interface' in 'filename' to CCAT using 'addr' as a buffer");
+diff --git a/board/beckhoff/mx53cx9020/mx53cx9020_video.c b/board/beckhoff/mx53cx9020/mx53cx9020_video.c
+new file mode 100644
+index 0000000..0e7315e
+--- /dev/null
++++ b/board/beckhoff/mx53cx9020/mx53cx9020_video.c
+@@ -0,0 +1,83 @@
++/*
++ * Copyright (C) 2015  Beckhoff Automation GmbH & Co. KG
++ * Patrick Bruenn <p.bruenn@beckhoff.com>
++ *
++ * Based on Freescale's Linux i.MX mx53loco_video.c file:
++ * Copyright (C) 2012 Freescale Semiconductor, Inc.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#include <common.h>
++#include <linux/list.h>
++#include <asm/gpio.h>
++#include <asm/arch/iomux-mx53.h>
++#include <linux/fb.h>
++#include <ipu_pixfmt.h>
++
++#define CX9020_DVI_PWD	IMX_GPIO_NR(6, 1)
++
++static struct fb_videomode const vga_640x480 = {
++	.name = "VESA_VGA_640x480",
++	.refresh = 60,
++	.xres = 640,
++	.yres = 480,
++	.pixclock = 39721,	/* picosecond (25.175 MHz) */
++	.left_margin = 40,
++	.right_margin = 60,
++	.upper_margin = 10,
++	.lower_margin = 10,
++	.hsync_len = 20,
++	.vsync_len = 10,
++	.sync = 0,
++	.vmode = FB_VMODE_NONINTERLACED
++};
++
++void setup_iomux_lcd(void)
++{
++	static const iomux_v3_cfg_t lcd_pads[] = {
++		MX53_PAD_DI0_DISP_CLK__IPU_DI0_DISP_CLK,
++		MX53_PAD_DI0_PIN15__IPU_DI0_PIN15,
++		MX53_PAD_DI0_PIN2__IPU_DI0_PIN2,
++		MX53_PAD_DI0_PIN3__IPU_DI0_PIN3,
++		MX53_PAD_DI0_PIN4__IPU_DI0_PIN4,
++		MX53_PAD_DISP0_DAT0__IPU_DISP0_DAT_0,
++		MX53_PAD_DISP0_DAT1__IPU_DISP0_DAT_1,
++		MX53_PAD_DISP0_DAT2__IPU_DISP0_DAT_2,
++		MX53_PAD_DISP0_DAT3__IPU_DISP0_DAT_3,
++		MX53_PAD_DISP0_DAT4__IPU_DISP0_DAT_4,
++		MX53_PAD_DISP0_DAT5__IPU_DISP0_DAT_5,
++		MX53_PAD_DISP0_DAT6__IPU_DISP0_DAT_6,
++		MX53_PAD_DISP0_DAT7__IPU_DISP0_DAT_7,
++		MX53_PAD_DISP0_DAT8__IPU_DISP0_DAT_8,
++		MX53_PAD_DISP0_DAT9__IPU_DISP0_DAT_9,
++		MX53_PAD_DISP0_DAT10__IPU_DISP0_DAT_10,
++		MX53_PAD_DISP0_DAT11__IPU_DISP0_DAT_11,
++		MX53_PAD_DISP0_DAT12__IPU_DISP0_DAT_12,
++		MX53_PAD_DISP0_DAT13__IPU_DISP0_DAT_13,
++		MX53_PAD_DISP0_DAT14__IPU_DISP0_DAT_14,
++		MX53_PAD_DISP0_DAT15__IPU_DISP0_DAT_15,
++		MX53_PAD_DISP0_DAT16__IPU_DISP0_DAT_16,
++		MX53_PAD_DISP0_DAT17__IPU_DISP0_DAT_17,
++		MX53_PAD_DISP0_DAT18__IPU_DISP0_DAT_18,
++		MX53_PAD_DISP0_DAT19__IPU_DISP0_DAT_19,
++		MX53_PAD_DISP0_DAT20__IPU_DISP0_DAT_20,
++		MX53_PAD_DISP0_DAT21__IPU_DISP0_DAT_21,
++		MX53_PAD_DISP0_DAT22__IPU_DISP0_DAT_22,
++		MX53_PAD_DISP0_DAT23__IPU_DISP0_DAT_23,
++	};
++
++	imx_iomux_v3_setup_multiple_pads(lcd_pads, ARRAY_SIZE(lcd_pads));
++
++	/* Turn on DVI_PWD */
++	imx_iomux_v3_setup_pad(MX53_PAD_CSI0_DAT15__GPIO6_1);
++	gpio_direction_output(CX9020_DVI_PWD, 1);
++}
++
++int board_video_skip(void)
++{
++	const int ret = ipuv3_fb_init(&vga_640x480, 0, IPU_PIX_FMT_RGB24);
++	if (ret)
++		printf("VESA VG 640x480 cannot be configured: %d\n", ret);
++	return ret;
++}
+diff --git a/configs/mx53cx9020_defconfig b/configs/mx53cx9020_defconfig
+new file mode 100644
+index 0000000..cc4f1a4
+--- /dev/null
++++ b/configs/mx53cx9020_defconfig
+@@ -0,0 +1,5 @@
++CONFIG_ARM=y
++CONFIG_TARGET_MX53CX9020=y
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/beckhoff/mx53cx9020/imximage.cfg"
++# CONFIG_CMD_IMLS is not set
++# CONFIG_CMD_SETEXPR is not set
+diff --git a/include/configs/mx53cx9020.h b/include/configs/mx53cx9020.h
+new file mode 100644
+index 0000000..0a07eeb
+--- /dev/null
++++ b/include/configs/mx53cx9020.h
+@@ -0,0 +1,362 @@
++/*
++ * Copyright (C) 2015  Beckhoff Automation GmbH & Co. KG
++ * Patrick Bruenn <p.bruenn@beckhoff.com>
++ *
++ * Configuration settings for Beckhoff CX9020.
++ *
++ * Based on Freescale's Linux i.MX mx53loco.h file:
++ * Copyright (C) 2010-2011 Freescale Semiconductor.
++ *
++ * SPDX-License-Identifier:	GPL-2.0+
++ */
++
++#ifndef __CONFIG_H
++#define __CONFIG_H
++
++#define CONFIG_MX53
++
++#define CONFIG_DISPLAY_BOARDINFO
++
++#define CONFIG_MACH_TYPE	MACH_TYPE_MX53_LOCO
++
++#include <asm/arch/imx-regs.h>
++
++#define CONFIG_CMDLINE_TAG
++#define CONFIG_SETUP_MEMORY_TAGS
++#define CONFIG_INITRD_TAG
++
++#define CONFIG_SYS_GENERIC_BOARD
++
++/* Size of malloc() pool */
++#define CONFIG_SYS_MALLOC_LEN		(10 * 1024 * 1024)
++
++#define CONFIG_BOARD_EARLY_INIT_F
++#define CONFIG_BOARD_LATE_INIT
++#define CONFIG_MXC_GPIO
++#define CONFIG_REVISION_TAG
++
++#define CONFIG_MXC_UART
++#define CONFIG_MXC_UART_BASE	UART2_BASE
++
++/* MMC Configs */
++#define CONFIG_FSL_ESDHC
++#define CONFIG_SYS_FSL_ESDHC_ADDR	0
++#define CONFIG_SYS_FSL_ESDHC_NUM	2
++
++#define CONFIG_MMC
++#define CONFIG_CMD_MMC
++#define CONFIG_GENERIC_MMC
++#define CONFIG_CMD_FAT
++#define CONFIG_CMD_EXT2
++#define CONFIG_CMD_EXT4
++#define CONFIG_CMD_FS_GENERIC
++
++/* CCAT FPGA Configs */
++#define CONFIG_CMD_CCAT
++
++/* bootz: zImage/initrd.img support */
++#define CONFIG_CMD_BOOTZ
++#define CONFIG_SUPPORT_RAW_INITRD
++#define CONFIG_DOS_PARTITION
++
++/* Eth Configs */
++#define CONFIG_MII
++
++#define CONFIG_FEC_MXC
++#define IMX_FEC_BASE	FEC_BASE_ADDR
++#define CONFIG_FEC_MXC_PHYADDR	0x1F
++
++#define CONFIG_CMD_PING
++#define CONFIG_CMD_DHCP
++#define CONFIG_CMD_MII
++
++/* USB Configs */
++#define CONFIG_CMD_USB
++#define CONFIG_CMD_FAT
++#define CONFIG_USB_EHCI
++#define CONFIG_USB_EHCI_MX5
++#define CONFIG_USB_STORAGE
++#define CONFIG_USB_HOST_ETHER
++#define CONFIG_USB_ETHER_ASIX
++#define CONFIG_USB_ETHER_MCS7830
++#define CONFIG_USB_ETHER_SMSC95XX
++#define CONFIG_MXC_USB_PORT	1
++#define CONFIG_MXC_USB_PORTSC	(PORT_PTS_UTMI | PORT_PTS_PTW)
++#define CONFIG_MXC_USB_FLAGS	0
++
++/* I2C Configs */
++#define CONFIG_SYS_I2C
++#define CONFIG_SYS_I2C_MXC
++#define CONFIG_SYS_I2C_MXC_I2C3		/* enable I2C bus 3 */
++
++/* PMIC Controller */
++#define CONFIG_POWER
++#define CONFIG_POWER_I2C
++#define CONFIG_DIALOG_POWER
++#define CONFIG_POWER_FSL
++#define CONFIG_POWER_FSL_MC13892
++#define CONFIG_SYS_DIALOG_PMIC_I2C_ADDR	0x48
++#define CONFIG_SYS_FSL_PMIC_I2C_ADDR	0x8
++
++/* allow to overwrite serial and ethaddr */
++#define CONFIG_ENV_OVERWRITE
++#define CONFIG_CONS_INDEX		1
++#define CONFIG_BAUDRATE			115200
++
++/* Command definition */
++#define CONFIG_CMD_BOOTZ
++#define CONFIG_SUPPORT_RAW_INITRD
++
++#define CONFIG_BOOTDELAY	1
++
++#define CONFIG_ETHPRIME		"FEC0"
++
++#define CONFIG_LOADADDR		0x70010000	/* loadaddr env var */
++#define CONFIG_SYS_TEXT_BASE    0x77800000
++
++#define CONFIG_EXTRA_ENV_SETTINGS \
++	"initrd_high=0xffffffff\0" \
++	"fdt_high=0xffffffff\0" \
++	"script=boot.scr\0" \
++	"image=zImage\0" \
++	"fdt_dir=/dtbs/\0" \
++	"fdt_addr=0x71ff0000\0" \
++	"rdaddr=0x72000000\0" \
++	"boot_fdt=try\0" \
++	"ip_dyn=yes\0" \
++	"console=ttymxc1,115200\0" \
++	"optargs=\0" \
++	"cmdline=\0" \
++	"mmcdev=0\0" \
++	"mmcpart=1\0" \
++	"mmcroot=/dev/mmcblk0p2 ro\0" \
++	"mmcrootfstype=ext4 rootwait fixrtc\0" \
++	"mmcargs=setenv bootargs console=${console} " \
++		"${optargs} " \
++		"root=${mmcroot} " \
++		"rootfstype=${mmcrootfstype} " \
++		"${cmdline}\0" \
++	"loadbootscript=" \
++		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
++	"bootscript=echo Running bootscript from mmc ...; " \
++		"source\0" \
++	"loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
++	"loadrd=load mmc ${bootpart} ${rdaddr} ${bootdir}/${rdfile}; setenv rdsize ${filesize}\0" \
++	"loadfdt=echo loading ${fdtdir}/${fdt_file} ...;  load mmc ${bootpart} ${fdt_addr} ${fdtdir}/${fdt_file}\0" \
++	"mmcboot=mmc dev ${mmcdev}; " \
++		"if mmc rescan; then " \
++			"echo SD/MMC found on device ${mmcdev};" \
++			"setenv bootpart ${mmcdev}:1; " \
++			"echo Checking for: /uEnv.txt ...;" \
++			"if test -e mmc ${bootpart} /uEnv.txt; then " \
++				"load mmc ${bootpart} ${loadaddr} /uEnv.txt;" \
++				"env import -t ${loadaddr} ${filesize};" \
++				"echo Loaded environment from /uEnv.txt;" \
++				"echo Checking if uenvcmd is set ...;" \
++				"if test -n ${uenvcmd}; then " \
++					"echo Running uenvcmd ...;" \
++					"run uenvcmd;" \
++				"fi;" \
++			"fi; " \
++			"echo Checking for: /boot/uEnv.txt ...;" \
++			"for i in 1 2 3 4 5 6 7 ; do " \
++				"setenv mmcpart ${i};" \
++				"setenv bootpart ${mmcdev}:${mmcpart};" \
++				"if test -e mmc ${bootpart} /boot/uEnv.txt; then " \
++					"load mmc ${bootpart} ${loadaddr} /boot/uEnv.txt;" \
++					"env import -t ${loadaddr} ${filesize};" \
++					"echo Loaded environment from /boot/uEnv.txt;" \
++					"if test -n ${dtb}; then " \
++						"setenv fdt_file ${dtb};" \
++						"echo Using: dtb=${fdt_file} ...;" \
++					"fi;" \
++					"echo Checking if uname_r is set in /boot/uEnv.txt...;" \
++					"if test -n ${uname_r}; then " \
++						"echo Running uname_boot ...;" \
++						"setenv mmcroot /dev/mmcblk${mmcdev}p${mmcpart} ro;" \
++						"run uname_boot;" \
++					"fi;" \
++				"fi;" \
++			"done;" \
++		"fi;\0" \
++	"mmcboot_old=echo Booting from mmc ...; " \
++		"run mmcargs; " \
++		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
++			"if run loadfdt; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo WARN: Cannot load the DT; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0" \
++	"netargs=setenv bootargs console=ttymxc0,${baudrate} " \
++		"root=/dev/nfs " \
++		"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" \
++	"netboot=echo Booting from net ...; " \
++		"run netargs; " \
++		"if test ${ip_dyn} = yes; then " \
++			"setenv get_cmd dhcp; " \
++		"else " \
++			"setenv get_cmd tftp; " \
++		"fi; " \
++		"${get_cmd} ${image}; " \
++		"if test ${boot_fdt} = yes ||  test ${boot_fdt} = try; then " \
++			"if ${get_cmd} ${fdt_addr} ${fdt_file}; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo ERROR: Cannot load the DT; " \
++					"exit; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0" \
++	"uname_boot="\
++		"setenv bootdir /boot; " \
++		"setenv bootfile vmlinuz-${uname_r}; " \
++		"setenv ccatfile /boot/ccat.rbf; " \
++		"echo loading CCAT firmware from ${ccatfile}; " \
++		"loadccat mmc ${bootpart} ${loadaddr} ${ccatfile}; " \
++		"if test -e mmc ${bootpart} ${bootdir}/${bootfile}; then " \
++			"echo loading ${bootdir}/${bootfile} ...; "\
++			"run loadimage;" \
++			"setenv fdtdir /boot/dtbs/${uname_r}; " \
++			"if test -e mmc ${bootpart} ${fdtdir}/${fdt_file}; then " \
++				"run loadfdt;" \
++			"else " \
++				"setenv fdtdir /usr/lib/linux-image-${uname_r}; " \
++				"if test -e mmc ${bootpart} ${fdtdir}/${fdt_file}; then " \
++					"run loadfdt;" \
++				"else " \
++					"setenv fdtdir /lib/firmware/${uname_r}/device-tree; " \
++					"if test -e mmc ${bootpart} ${fdtdir}/${fdt_file}; then " \
++						"run loadfdt;" \
++					"else " \
++						"setenv fdtdir /boot/dtb-${uname_r}; " \
++						"if test -e mmc ${bootpart} ${fdtdir}/${fdt_file}; then " \
++							"run loadfdt;" \
++						"else " \
++							"setenv fdtdir /boot/dtbs; " \
++							"if test -e mmc ${bootpart} ${fdtdir}/${fdt_file}; then " \
++								"run loadfdt;" \
++							"else " \
++								"setenv fdtdir /boot/dtb; " \
++								"if test -e mmc ${bootpart} ${fdtdir}/${fdt_file}; then " \
++									"run loadfdt;" \
++								"else " \
++									"setenv fdtdir /boot; " \
++									"if test -e mmc ${bootpart} ${fdtdir}/${fdt_file}; then " \
++										"run loadfdt;" \
++									"else " \
++										"echo; echo unable to find ${fdt_file} ...; echo booting legacy ...;"\
++										"run mmcargs;" \
++										"echo debug: [${bootargs}] ... ;" \
++										"echo debug: [bootz ${loadaddr}] ... ;" \
++										"bootz ${loadaddr}; " \
++									"fi;" \
++								"fi;" \
++							"fi;" \
++						"fi;" \
++					"fi;" \
++				"fi;" \
++			"fi; " \
++			"setenv rdfile initrd.img-${uname_r}; " \
++			"if test -e mmc ${bootpart} ${bootdir}/${rdfile}; then " \
++				"echo loading ${bootdir}/${rdfile} ...; "\
++				"run loadrd;" \
++				"if test -n ${uuid}; then " \
++					"setenv mmcroot UUID=${uuid} ro;" \
++				"fi;" \
++				"run mmcargs;" \
++				"echo debug: [${bootargs}] ... ;" \
++				"echo debug: [bootz ${loadaddr} ${rdaddr}:${rdsize} ${fdt_addr}] ... ;" \
++				"bootz ${loadaddr} ${rdaddr}:${rdsize} ${fdt_addr}; " \
++			"else " \
++				"run mmcargs;" \
++				"echo debug: [${bootargs}] ... ;" \
++				"echo debug: [bootz ${loadaddr} - ${fdt_addr}] ... ;" \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"fi;" \
++		"fi;\0"
++
++#define CONFIG_BOOTCOMMAND \
++	"run mmcboot;"
++
++#define CONFIG_ARP_TIMEOUT	200UL
++
++/* Miscellaneous configurable options */
++#define CONFIG_SYS_LONGHELP		/* undef to save memory */
++#define CONFIG_SYS_HUSH_PARSER		/* use "hush" command parser */
++#define CONFIG_AUTO_COMPLETE
++#define CONFIG_SYS_CBSIZE		512	/* Console I/O Buffer Size */
++
++#define CONFIG_SYS_MAXARGS	16	/* max number of command args */
++#define CONFIG_SYS_BARGSIZE CONFIG_SYS_CBSIZE /* Boot Argument Buffer Size */
++
++#define CONFIG_SYS_MEMTEST_START       0x70000000
++#define CONFIG_SYS_MEMTEST_END         0x70010000
++
++#define CONFIG_SYS_LOAD_ADDR		CONFIG_LOADADDR
++
++#define CONFIG_CMDLINE_EDITING
++
++/* Physical Memory Map */
++#define CONFIG_NR_DRAM_BANKS	2
++#define PHYS_SDRAM_1			CSD0_BASE_ADDR
++#define PHYS_SDRAM_1_SIZE		(gd->bd->bi_dram[0].size)
++#define PHYS_SDRAM_2			CSD1_BASE_ADDR
++#define PHYS_SDRAM_2_SIZE		(gd->bd->bi_dram[1].size)
++#define PHYS_SDRAM_SIZE			(gd->ram_size)
++
++#define CONFIG_SYS_SDRAM_BASE		(PHYS_SDRAM_1)
++#define CONFIG_SYS_INIT_RAM_ADDR	(IRAM_BASE_ADDR)
++#define CONFIG_SYS_INIT_RAM_SIZE	(IRAM_SIZE)
++
++#define CONFIG_SYS_INIT_SP_OFFSET \
++	(CONFIG_SYS_INIT_RAM_SIZE - GENERATED_GBL_DATA_SIZE)
++#define CONFIG_SYS_INIT_SP_ADDR \
++	(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_INIT_SP_OFFSET)
++
++/* FLASH and environment organization */
++#define CONFIG_SYS_NO_FLASH
++
++#define CONFIG_ENV_OFFSET      (6 * 64 * 1024)
++#define CONFIG_ENV_SIZE        (8 * 1024)
++#define CONFIG_ENV_IS_IN_MMC
++#define CONFIG_SYS_MMC_ENV_DEV 0
++
++#define CONFIG_OF_LIBFDT
++
++#define CONFIG_CMD_SATA
++#ifdef CONFIG_CMD_SATA
++	#define CONFIG_DWC_AHSATA
++	#define CONFIG_SYS_SATA_MAX_DEVICE      1
++	#define CONFIG_DWC_AHSATA_PORT_ID       0
++	#define CONFIG_DWC_AHSATA_BASE_ADDR     SATA_BASE_ADDR
++	#define CONFIG_LBA48
++	#define CONFIG_LIBATA
++#endif
++
++/* Framebuffer and LCD */
++#define CONFIG_PREBOOT
++#define CONFIG_VIDEO
++#define CONFIG_VIDEO_IPUV3
++#define CONFIG_CFB_CONSOLE
++#define CONFIG_VGA_AS_SINGLE_DEVICE
++#define CONFIG_SYS_CONSOLE_IS_IN_ENV
++#define CONFIG_SYS_CONSOLE_OVERWRITE_ROUTINE
++#define CONFIG_VIDEO_BMP_RLE8
++#define CONFIG_SPLASH_SCREEN
++#define CONFIG_BMP_16BPP
++#define CONFIG_VIDEO_LOGO
++#define CONFIG_IPUV3_CLK	200000000
++
++#endif				/* __CONFIG_H */
