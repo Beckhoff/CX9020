@@ -5,7 +5,7 @@ It only works with devices which are ordered with a special ordering number (CX9
 Please make sure to follow the steps below to create your microSD card.
 
 ## Installation
-
+'''
 ### prepare your machine f.e.: 64-bit Ubuntu 14.04 LTS would require:
 ###===================================================================
 sudo dpkg --add-architecture i386
@@ -55,6 +55,7 @@ make etherlab
 ###install etherlab (optional):
 =============================
 ./scripts/52_install_etherlab.sh /dev/sdc1
+'''
 
 ## History
 TODO: Write history
