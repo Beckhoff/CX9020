@@ -6,9 +6,9 @@ CROSS_PATH=$(shell pwd)/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/b
 CROSS_PREFIX=$(shell pwd)/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
 
 etherlab:
-	cd ${ETHERLAB} && ./configure --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --disable-tool --enable-ccat PATH=${PATH}:${CROSS_PATH}
+	cd ${ETHERLAB} && ./configure --host=arm-linux-gnueabihf --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --disable-tool --enable-ccat PATH=${CROSS_PATH}:${PATH}
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} clean
-	cd ${ETHERLAB} && make
+	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX}
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} modules
 
 uboot:

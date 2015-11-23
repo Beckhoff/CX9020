@@ -23,7 +23,7 @@ sudo mount ${PARTITION} ${ROOTFS_MOUNT}
 
 pushd ${ETHERLAB}
 sudo make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
-sudo make DESTDIR=${ROOTFS_MOUNT} install
+sudo make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} DESTDIR=${ROOTFS_MOUNT} PATH=${PATH}:${CROSS_PATH} install
 popd
 
 sudo mkdir -p ${ROOTFS_MOUNT}/etc/sysconfig/
