@@ -23,6 +23,7 @@ sudo mount ${PARTITION} ${ROOTFS_MOUNT}
 
 # install kernel
 pushd ${KERNEL}
+sudo rm -rf ${ROOTFS_MOUNT}/lib/modules/${kernel_version}/
 sudo make ARCH=arm CROSS_COMPILE=${CC} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
 popd
 mkdir -p ${ROOTFS_MOUNT}/boot

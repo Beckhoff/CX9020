@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 4.1.10 Kernel Configuration
+# Linux/arm 4.1.12 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_ARM_HAS_SG_CHAIN=y
@@ -737,9 +737,7 @@ CONFIG_FIB_RULES=y
 # CONFIG_RFKILL_REGULATOR is not set
 # CONFIG_NET_9P is not set
 # CONFIG_CAIF is not set
-CONFIG_CEPH_LIB=m
-# CONFIG_CEPH_LIB_PRETTYDEBUG is not set
-# CONFIG_CEPH_LIB_USE_DNS_RESOLVER is not set
+# CONFIG_CEPH_LIB is not set
 # CONFIG_NFC is not set
 CONFIG_HAVE_BPF_JIT=y
 
