@@ -1,18 +1,19 @@
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index d551df6..7981936 100644
+index d551df6..6402d4c 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -41,6 +41,9 @@ MODULE_DESCRIPTION("PHY library");
+@@ -41,6 +41,10 @@ MODULE_DESCRIPTION("PHY library");
  MODULE_AUTHOR("Andy Fleming");
  MODULE_LICENSE("GPL");
  
++static const int first_phy_addr = 1;
 +static int num_phys = 1;
 +module_param(num_phys, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
 +
  void phy_device_free(struct phy_device *phydev)
  {
  	put_device(&phydev->dev);
-@@ -1050,6 +1053,35 @@ int genphy_read_status(struct phy_device *phydev)
+@@ -1050,6 +1054,31 @@ int genphy_read_status(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_read_status);
  
@@ -29,31 +30,56 @@ index d551df6..7981936 100644
 + * This multiplexing feature is disabled by default. To enable it set the
 + * bootarg 'phy_driver.num_phys' to something > 1.
 + */
-+static int genphy_read_multiplexed_status(struct phy_device *phydev)
++static int genphy_read_status_multiplexed(struct phy_device *phydev)
 +{
-+        static const int BASE_ADDR = 1;
-+
-+        for (phydev->addr = BASE_ADDR; phydev->addr < num_phys; ++phydev->addr) {
-+                int status = genphy_update_link(phydev);
-+                if (status)
-+                        return status;
-+
-+                if (phydev->link)
-+                        return genphy_read_status(phydev);
++        for (phydev->addr = first_phy_addr; phydev->addr <= num_phys;
++             ++phydev->addr) {
++                int ret = genphy_read_status(phydev);
++                if (ret || phydev->link) {
++                        return ret;
++                }
 +        }
-+        return genphy_read_status(phydev);
++        return 0;
 +}
-+
 +
  static int gen10g_read_status(struct phy_device *phydev)
  {
  	int devad, reg;
-@@ -1362,7 +1394,7 @@ static struct phy_driver genphy_driver[] = {
+@@ -1098,6 +1127,20 @@ int genphy_soft_reset(struct phy_device *phydev)
+ }
+ EXPORT_SYMBOL(genphy_soft_reset);
+ 
++int genphy_soft_reset_multiplexed(struct phy_device *phydev)
++{
++        int ret;
++
++        for (phydev->addr = first_phy_addr; phydev->addr <= num_phys;
++             ++phydev->addr) {
++                ret = genphy_soft_reset(phydev);
++                if (ret)
++                        break;
++        }
++        phydev->addr = first_phy_addr;
++        return ret;
++}
++
+ int genphy_config_init(struct phy_device *phydev)
+ {
+ 	int val;
+@@ -1355,14 +1398,14 @@ static struct phy_driver genphy_driver[] = {
+ 	.phy_id		= 0xffffffff,
+ 	.phy_id_mask	= 0xffffffff,
+ 	.name		= "Generic PHY",
+-	.soft_reset	= genphy_soft_reset,
++	.soft_reset	= genphy_soft_reset_multiplexed,
+ 	.config_init	= genphy_config_init,
+ 	.features	= PHY_GBIT_FEATURES | SUPPORTED_MII |
+ 			  SUPPORTED_AUI | SUPPORTED_FIBRE |
  			  SUPPORTED_BNC,
  	.config_aneg	= genphy_config_aneg,
  	.aneg_done	= genphy_aneg_done,
 -	.read_status	= genphy_read_status,
-+	.read_status	= genphy_read_multiplexed_status,
++	.read_status	= genphy_read_status_multiplexed,
  	.suspend	= genphy_suspend,
  	.resume		= genphy_resume,
  	.driver		= { .owner = THIS_MODULE, },
