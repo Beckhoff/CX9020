@@ -1,5 +1,24 @@
+From 879c9014024c453e46bd687fb077c87d4e130130 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Patrick=20Br=C3=BCnn?= <p.bruenn@beckhoff.com>
+Date: Wed, 2 Dec 2015 10:50:16 +0100
+Subject: [PATCH 2/3] imx: parallel-display: add ddc support
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add ddc-i2c-bus as an additional source to read edid
+
+If you convert the 24-bit parallel-display signal to DVI and combine it
+with I2C, you can connect DVI-D displays to your imx powered device. An
+example for this setup is the CX9020 Embedded PC.
+
+Signed-off-by: Patrick Brünn <p.bruenn@beckhoff.com>
+---
+ drivers/gpu/drm/imx/parallel-display.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
 diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
-index 74a9ce4..40c912c 100644
+index b4deb9c..32b745a 100644
 --- a/drivers/gpu/drm/imx/parallel-display.c
 +++ b/drivers/gpu/drm/imx/parallel-display.c
 @@ -15,6 +15,7 @@
@@ -10,7 +29,7 @@ index 74a9ce4..40c912c 100644
  #include <drm/drmP.h>
  #include <drm/drm_fb_helper.h>
  #include <drm/drm_crtc_helper.h>
-@@ -37,6 +38,7 @@ struct imx_parallel_display {
+@@ -38,6 +39,7 @@ struct imx_parallel_display {
  	int mode_valid;
  	struct drm_display_mode mode;
  	struct drm_panel *panel;
@@ -18,7 +37,7 @@ index 74a9ce4..40c912c 100644
  };
  
  static enum drm_connector_status imx_pd_connector_detect(
-@@ -51,6 +53,16 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
+@@ -52,6 +54,16 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
  	struct device_node *np = imxpd->dev->of_node;
  	int num_modes = 0;
  
@@ -35,7 +54,7 @@ index 74a9ce4..40c912c 100644
  	if (imxpd->panel && imxpd->panel->funcs &&
  	    imxpd->panel->funcs->get_modes) {
  		num_modes = imxpd->panel->funcs->get_modes(imxpd->panel);
-@@ -89,6 +101,16 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
+@@ -90,6 +102,16 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
  	return num_modes;
  }
  
@@ -52,7 +71,7 @@ index 74a9ce4..40c912c 100644
  static struct drm_encoder *imx_pd_connector_best_encoder(
  		struct drm_connector *connector)
  {
-@@ -152,6 +174,7 @@ static struct drm_connector_funcs imx_pd_connector_funcs = {
+@@ -153,6 +175,7 @@ static struct drm_connector_funcs imx_pd_connector_funcs = {
  
  static struct drm_connector_helper_funcs imx_pd_connector_helper_funcs = {
  	.get_modes = imx_pd_connector_get_modes,
@@ -60,15 +79,15 @@ index 74a9ce4..40c912c 100644
  	.best_encoder = imx_pd_connector_best_encoder,
  };
  
-@@ -208,6 +231,7 @@ static int imx_pd_bind(struct device *dev, struct device *master, void *data)
+@@ -209,6 +232,7 @@ static int imx_pd_bind(struct device *dev, struct device *master, void *data)
  {
  	struct drm_device *drm = data;
  	struct device_node *np = dev->of_node;
 +	struct device_node *ddc_node;
- 	struct device_node *panel_node;
+ 	struct device_node *port;
  	const u8 *edidp;
  	struct imx_parallel_display *imxpd;
-@@ -218,6 +242,12 @@ static int imx_pd_bind(struct device *dev, struct device *master, void *data)
+@@ -219,6 +243,12 @@ static int imx_pd_bind(struct device *dev, struct device *master, void *data)
  	if (!imxpd)
  		return -ENOMEM;
  
@@ -81,3 +100,6 @@ index 74a9ce4..40c912c 100644
  	edidp = of_get_property(np, "edid", &imxpd->edid_len);
  	if (edidp)
  		imxpd->edid = kmemdup(edidp, imxpd->edid_len, GFP_KERNEL);
+-- 
+1.9.1
+

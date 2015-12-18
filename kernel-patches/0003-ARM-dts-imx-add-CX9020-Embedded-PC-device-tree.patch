@@ -1,8 +1,29 @@
+From cd581f2ead481fe9f75837e3cc0b4506d2ed9b95 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Patrick=20Br=C3=BCnn?= <p.bruenn@beckhoff.com>
+Date: Wed, 2 Dec 2015 11:02:28 +0100
+Subject: [PATCH 3/3] ARM: dts: imx: add CX9020 Embedded PC device tree
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The CX9020 differs from i.MX53 Quick Start Board by:
+- use uart2 instead of uart1
+- DVI-D connector instead of VGA
+- no audio
+- CCAT FPGA connected to emi
+
+Signed-off-by: Patrick Brünn <p.bruenn@beckhoff.com>
+---
+ arch/arm/boot/dts/Makefile         |   1 +
+ arch/arm/boot/dts/imx53-cx9020.dts | 363 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 364 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx53-cx9020.dts
+
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index f2e2c5f..f920b10 100644
+index 9b00aa9..b62948a 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -253,6 +253,7 @@ dtb-$(CONFIG_SOC_IMX53) += \
+@@ -273,6 +273,7 @@ dtb-$(CONFIG_SOC_IMX53) += \
  	imx53-ard.dtb \
  	imx53-m53evk.dtb \
  	imx53-mba53.dtb \
@@ -12,10 +33,10 @@ index f2e2c5f..f920b10 100644
  	imx53-smd.dtb \
 diff --git a/arch/arm/boot/dts/imx53-cx9020.dts b/arch/arm/boot/dts/imx53-cx9020.dts
 new file mode 100644
-index 0000000..193d66a
+index 0000000..fbc29f3
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx53-cx9020.dts
-@@ -0,0 +1,358 @@
+@@ -0,0 +1,363 @@
 +/*
 + * Copyright 2011 Freescale Semiconductor, Inc.
 + * Copyright 2011 Linaro Ltd.
@@ -30,6 +51,11 @@ index 0000000..193d66a
 +
 +/dts-v1/;
 +#include "imx53.dtsi"
++
++#define MX53_PAD_EIM_D26__UART2_RXD_MUX    0x144 0x48c 0x880 0x2 0x0
++#define MX53_PAD_EIM_D27__UART2_TXD_MUX    0x148 0x490 0x000 0x2 0x0
++#define MX53_PAD_EIM_D28__UART2_RTS        0x14c 0x494 0x87c 0x2 0x0
++#define MX53_PAD_EIM_D29__UART2_CTS        0x150 0x498 0x000 0x2 0x0
 +
 +/ {
 +	model = "Freescale i.MX53 based Beckhoff CX9020";
@@ -321,10 +347,10 @@ index 0000000..193d66a
 +
 +		pinctrl_uart2: uart2grp {
 +			fsl,pins = <
-+				MX53_PAD_EIM_D26__UART2_TXD_MUX	0x1e4
-+				MX53_PAD_EIM_D27__UART2_RXD_MUX 0x1e4
-+				MX53_PAD_EIM_D28__UART2_CTS 0x1e4
-+				MX53_PAD_EIM_D29__UART2_RTS 0x1e4
++				MX53_PAD_EIM_D26__UART2_RXD_MUX	0x1e4
++				MX53_PAD_EIM_D27__UART2_TXD_MUX 0x1e4
++				MX53_PAD_EIM_D28__UART2_RTS 0x1e4
++				MX53_PAD_EIM_D29__UART2_CTS 0x1e4
 +			>;
 +		};
 +	};
@@ -374,3 +400,6 @@ index 0000000..193d66a
 +	dr_mode = "peripheral";
 +	status = "okay";
 +};
+-- 
+1.9.1
+
