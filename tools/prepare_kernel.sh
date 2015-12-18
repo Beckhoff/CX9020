@@ -23,11 +23,9 @@ pushd ${REPO}
 git checkout -b dev-${RT_VERSION} v${RT_VERSION}
 
 # apply cx9020 patches
-patch -p1 < ../kernel-patches/0001_fix_imx53_uart2_pinmux.patch
-patch -p1 < ../kernel-patches/0002_ipu_diX_sel_can_set_parent_rates.patch
-patch -p1 < ../kernel-patches/0003_add_mode_valid__and__add_ddc_support.patch
-patch -p1 < ../kernel-patches/0005_add_multiplexed_read_status.patch
-patch -p1 < ../kernel-patches/0006_add_imx53_cx9020_devicetree.patch
+git am < ../kernel-patches/0001-clk-imx5-ipu_di_sel-clocks-can-set-parent-rates.patch
+git am < ../kernel-patches/0002-imx-parallel-display-add-ddc-support.patch
+git am < ../kernel-patches/0003-ARM-dts-imx-add-CX9020-Embedded-PC-device-tree.patch
 
 # apply prepared config
 cp -a ../kernel-patches/config-CX9020 .config
