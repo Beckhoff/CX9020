@@ -56,6 +56,13 @@ make etherlab
 #=============================
 ./scripts/52_install_etherlab.sh /dev/sdc1
 ```
+##Usage
+The standard login on first boot:
+
+User:     root
+Password: root
+
+Please change the root password immediately and additionally create your own user.
 
 ##History
 TODO: Write history
