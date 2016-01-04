@@ -60,6 +60,7 @@ make etherlab
 The standard login on first boot:
 
 User:     root
+
 Password: root
 
 Please change the root password immediately and additionally create your own user.
