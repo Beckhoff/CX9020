@@ -34,6 +34,6 @@ sudo mkdir -p ${ROOTFS_MOUNT}
 sudo mount ${PARTITION} ${ROOTFS_MOUNT}
 
 sudo mkdir -p ${TMP_MOUNT}
-sudo mount -t ext2 -o loop,offset=$((2048 * 512)) ${IMAGE}-old ${TMP_MOUNT}
+sudo mount -t ext4 -o loop,offset=$((2048 * 512)) ${IMAGE}-old ${TMP_MOUNT}
 
 sudo cp -a ${TMP_MOUNT}/* ${ROOTFS_MOUNT}/
