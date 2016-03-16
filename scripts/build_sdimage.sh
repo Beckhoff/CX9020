@@ -8,19 +8,14 @@ function cleanup
 	sudo losetup -d ${PARTITION} || true
 	sudo losetup -d ${DISK} || true
 	mv ${RAMDISK}/${IMAGE} ${IMAGE}
-	sudo umount ${RAMDISK}
 	exit
 }
 
 DISK=/dev/loop0
 PARTITION=/dev/loop1
 IMAGE=sdcard.img
-RAMDISK=/tmp/ramdisk
+RAMDISK=/dev/shm
 SCRIPT_PATH="`dirname \"$0\"`"
-
-mkdir -p ${RAMDISK}
-sudo mount -t ramfs ramfs ${RAMDISK}
-sudo chown gpb:gpb ${RAMDISK}
 
 dd if=/dev/zero of=${RAMDISK}/${IMAGE} bs=1M count=488
 sudo losetup ${DISK} ${RAMDISK}/${IMAGE}
