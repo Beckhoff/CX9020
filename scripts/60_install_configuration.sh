@@ -3,17 +3,12 @@
 set -e
 set -o nounset
 
-if [ $# -ne 1 ] || ! [ -b $1 ]; then
-	echo -e "Usage:\n $0 <partition>\n\nexample:\n $0 /dev/sdc1\n\n"
+if [ $# -ne 1 ] || ! [ -d $1 ]; then
+	echo -e "Usage:\n $0 <rootfs_mount>\n\nexample:\n $0 /tmp/rootfs\n\n"
 	exit -1
 fi
 
-PARTITION=$1
-ROOTFS_MOUNT=/media/rootfs
-
-trap "sudo umount ${ROOTFS_MOUNT}; exit" INT TERM EXIT
-
-sudo mount ${PARTITION} ${ROOTFS_MOUNT}
+ROOTFS_MOUNT=$1
 
 # create fstab
 sudo sh -c "echo '/dev/mmcblk0p1        /       auto    errors=remount-ro       0       1' >> ${ROOTFS_MOUNT}/etc/fstab"

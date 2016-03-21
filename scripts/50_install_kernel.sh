@@ -3,23 +3,18 @@
 set -e
 set -o nounset
 
-if [ $# -ne 1 ] || ! [ -b $1 ]; then
-	echo -e "Usage:\n $0 <partition>\n\nexample:\n $0 /dev/sdc1\n\n"
+if [ $# -ne 1 ] || ! [ -d $1 ]; then
+	echo -e "Usage:\n $0 <rootfs_mount>\n\nexample:\n $0 /tmp/rootfs\n\n"
 	exit -1
 fi
 
-PARTITION=$1
-ROOTFS_MOUNT=/media/rootfs
+ROOTFS_MOUNT=$1
 
 KERNEL=kernel
 kernel_version=`cat ${KERNEL}/include/config/kernel.release`
 CCAT_FIRMWARE=tools/ccat.rbf
 
 CC=`pwd`/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
-
-trap "sudo umount ${ROOTFS_MOUNT}; exit" INT TERM EXIT
-
-sudo mount ${PARTITION} ${ROOTFS_MOUNT}
 
 # install kernel
 pushd ${KERNEL}

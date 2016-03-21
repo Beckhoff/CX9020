@@ -3,25 +3,15 @@
 set -e
 set -o nounset
 
-if [ $# -ne 1 ] || ! [ -b $1 ]; then
-	echo -e "Usage:\n $0 <partition>\n\nexample:\n $0 /dev/sdc1\n\n"
+if [ $# -ne 1 ] || ! [ -d $1 ]; then
+	echo -e "Usage:\n $0 <rootfs_mount>\n\nexample:\n $0 /tmp/rootfs\n\n"
 	exit -1
 fi
 
-PARTITION=$1
-DEB_RELEASE=jessie
-ROOTFS_MOUNT=/media/rootfs
+ROOTFS_MOUNT=$1
 SCRIPT_PATH="`dirname \"$0\"`"
 
-CC=`pwd`/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
-
-trap "sudo umount -f ${ROOTFS_MOUNT}/dev | true; sudo umount ${ROOTFS_MOUNT}; exit" INT TERM EXIT
-
-sudo umount ${PARTITION} || /bin/true
-sudo mkfs.ext4 ${PARTITION}
-
-sudo mkdir -p ${ROOTFS_MOUNT}
-sudo mount ${PARTITION} ${ROOTFS_MOUNT}
+trap "sudo umount -f ${ROOTFS_MOUNT}/dev || true; exit" INT TERM EXIT
 
 #debian rootfs
 echo "Building debian rootfs..."
@@ -33,7 +23,7 @@ sudo cp /etc/resolv.conf ${ROOTFS_MOUNT}/etc/
 sudo cp ${SCRIPT_PATH}/install_rootfs_second_stage.sh ${ROOTFS_MOUNT}
 sudo chmod u+x ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 sudo mount --bind /dev ${ROOTFS_MOUNT}/dev
-sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh ${DEB_RELEASE}"
+sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh"
 
 # remove chroot helpers
 sudo umount ${ROOTFS_MOUNT}/dev
