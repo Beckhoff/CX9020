@@ -1,22 +1,18 @@
 #!/bin/bash
+# run this inside of your chroot'ed new rootfs
 
 set -e
-set -o nounset
 
-if [ $# -ne 1 ]; then
-	echo -e "Usage:\n $0 <debian release>\n\nexample:\n $0 jessie\n\n"
-	exit -1
-fi
+export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
+export LC_ALL=C LANGUAGE=C LANG=C
 
-DEB_RELEASE=$1
+/var/lib/dpkg/info/dash.preinst install
+cp -a /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
-/debootstrap/debootstrap --second-stage
-
-echo -e "deb http://ftp.de.debian.org/debian ${DEB_RELEASE} main contrib non-free\ndeb-src http://ftp.de.debian.org/debian ${DEB_RELEASE} main contrib non-free\ndeb http://ftp.de.debian.org/debian ${DEB_RELEASE}-updates main contrib non-free\ndeb-src http://ftp.de.debian.org/debian ${DEB_RELEASE}-updates main contrib non-free\ndeb http://security.debian.org/debian-security ${DEB_RELEASE}/updates main contrib non-free\ndeb-src http://security.debian.org/debian-security ${DEB_RELEASE}/updates main contrib non-free\n" > /etc/apt/sources.list
-
-apt-get clean
-rm -rf /var/lib/apt/lists/*
+dpkg --configure -a
+mount proc -t proc /proc
+dpkg --configure -a
+umount proc
 
 echo 'root:root' | chpasswd
 echo 'CX9020' > /etc/hostname
-exit

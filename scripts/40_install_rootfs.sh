@@ -15,7 +15,7 @@ SCRIPT_PATH="`dirname \"$0\"`"
 
 CC=`pwd`/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
 
-trap "sudo umount ${ROOTFS_MOUNT}; exit" INT TERM EXIT
+trap "sudo umount -f ${ROOTFS_MOUNT}/dev | true; sudo umount ${ROOTFS_MOUNT}; exit" INT TERM EXIT
 
 sudo umount ${PARTITION} || /bin/true
 sudo mkfs.ext4 ${PARTITION}
@@ -26,14 +26,17 @@ sudo mount ${PARTITION} ${ROOTFS_MOUNT}
 #debian rootfs
 echo "Building debian rootfs..."
 
-sudo debootstrap --include=openssh-server --arch=armhf --foreign ${DEB_RELEASE} ${ROOTFS_MOUNT}
+sudo multistrap -f ${SCRIPT_PATH}/../tools/multistrap.conf -d ${ROOTFS_MOUNT}
+
 sudo cp /usr/bin/qemu-arm-static ${ROOTFS_MOUNT}/usr/bin/
 sudo cp /etc/resolv.conf ${ROOTFS_MOUNT}/etc/
 sudo cp ${SCRIPT_PATH}/install_rootfs_second_stage.sh ${ROOTFS_MOUNT}
 sudo chmod u+x ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
+sudo mount --bind /dev ${ROOTFS_MOUNT}/dev
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh ${DEB_RELEASE}"
 
 # remove chroot helpers
+sudo umount ${ROOTFS_MOUNT}/dev
 sudo rm ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 sudo rm ${ROOTFS_MOUNT}/etc/resolv.conf
 sudo rm ${ROOTFS_MOUNT}/usr/bin/qemu-arm-static

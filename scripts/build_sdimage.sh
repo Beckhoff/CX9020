@@ -17,7 +17,7 @@ IMAGE=sdcard.img
 RAMDISK=/dev/shm
 SCRIPT_PATH="`dirname \"$0\"`"
 
-dd if=/dev/zero of=${RAMDISK}/${IMAGE} bs=1M count=488
+dd if=/dev/zero of=${RAMDISK}/${IMAGE} bs=1M count=288
 sudo losetup ${DISK} ${RAMDISK}/${IMAGE}
 sudo losetup ${PARTITION} ${DISK} -o $((2048 * 512))
 trap cleanup INT TERM EXIT
