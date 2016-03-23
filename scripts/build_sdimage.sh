@@ -5,29 +5,37 @@ set -o nounset
 
 function cleanup
 {
-	sudo umount ${ROOTFS_MOUNT} || true
-	sudo losetup -d ${PARTITION} || true
-	sudo losetup -d ${DISK} || true
-	mv ${RAMDISK}/${IMAGE} ${IMAGE}
+	umount ${ROOTFS_MOUNT} || true
+	mv ${RAMDISK_IMAGE} ${IMAGE}
 	exit
 }
 
-DISK=/dev/loop0
-PARTITION=/dev/loop1
 IMAGE=sdcard.img
 RAMDISK=/dev/shm
-ROOTFS_MOUNT=/media/rootfs
+RAMDISK_IMAGE=${RAMDISK}/${IMAGE}
+ROOTFS_MOUNT=/tmp/rootfs
+TMP_MOUNT=${ROOTFS_MOUNT}-tmp
+ROOTFS_OWNER=${1-1001:1001}
+UBOOT=u-boot/u-boot.imx
+MBR=tools/mbr.bin
+PARTITION_CONFIG=tools/partitions.sfdisk
 SCRIPT_PATH="`dirname \"$0\"`"
 
-dd if=/dev/zero of=${RAMDISK}/${IMAGE} bs=1M count=288
-sudo losetup ${DISK} ${RAMDISK}/${IMAGE}
-sudo losetup ${PARTITION} ${DISK} -o $((2048 * 512))
 trap cleanup INT TERM EXIT
 
-${SCRIPT_PATH}/10_install_mbr.sh ${DISK}
-${SCRIPT_PATH}/20_install_uboot.sh ${DISK}
-${SCRIPT_PATH}/30_install_partition.sh ${PARTITION} ${ROOTFS_MOUNT}
-${SCRIPT_PATH}/40_install_rootfs.sh ${ROOTFS_MOUNT}
-${SCRIPT_PATH}/50_install_kernel.sh ${ROOTFS_MOUNT}
-${SCRIPT_PATH}/52_install_etherlab.sh ${ROOTFS_MOUNT}
-${SCRIPT_PATH}/60_install_configuration.sh ${ROOTFS_MOUNT}
+rm -rf ${TMP_MOUNT}
+mkdir -p ${TMP_MOUNT}
+${SCRIPT_PATH}/40_install_rootfs.sh ${TMP_MOUNT}
+${SCRIPT_PATH}/50_install_kernel.sh ${TMP_MOUNT}
+${SCRIPT_PATH}/52_install_etherlab.sh ${TMP_MOUNT}
+${SCRIPT_PATH}/60_install_configuration.sh ${TMP_MOUNT}
+
+dd if=/dev/zero of=${RAMDISK_IMAGE} bs=1M count=238
+mkfs.ext2 -F -E offset=1048576,root_owner=${ROOTFS_OWNER} ${RAMDISK_IMAGE}
+dd if=${MBR} of=${RAMDISK_IMAGE} conv=notrunc
+dd if=${UBOOT} of=${RAMDISK_IMAGE} seek=2 bs=512 conv=notrunc
+sfdisk --force --in-order --Linux --unit M ${RAMDISK_IMAGE} < ${PARTITION_CONFIG}
+
+mkdir -p ${ROOTFS_MOUNT}
+mount ${ROOTFS_MOUNT}
+mv ${TMP_MOUNT}/* ${ROOTFS_MOUNT}/
