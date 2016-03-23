@@ -10,7 +10,7 @@ Please make sure to follow the steps below to create your microSD card.
 #===================================================================
 sudo dpkg --add-architecture i386
 sudo apt-get update
-sudo apt-get install -y debootstrap qemu binfmt-support qemu-user-static mercurial libtool autoconf lib32z1 lib32ncurses5-dev lib32stdc++6 git
+sudo apt-get install -y multistrap qemu binfmt-support qemu-user-static mercurial libtool autoconf lib32z1 lib32ncurses5-dev lib32stdc++6 git
 
 
 # get the repository:
