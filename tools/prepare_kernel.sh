@@ -3,7 +3,6 @@
 # Overview of maintained kernels: https://kernel.org/releases.html
 
 set -e
-set -o nounset
 
 if [ "$#" -ne 3 ]; then
 
@@ -18,7 +17,7 @@ RT_VERSION=${FULL_VERSION}-rt${3}
 REPO=kernel
 
 # clone a clean linux-rt-devel repository
-git clone git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git ${REPO}
+git clone git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git ${REPO} ${GIT_CLONE_ARGS}
 pushd ${REPO}
 git checkout -b dev-${RT_VERSION} v${RT_VERSION}
 
