@@ -22,7 +22,9 @@ cp /usr/bin/qemu-arm-static ${ROOTFS_MOUNT}/usr/bin/
 cp /etc/resolv.conf ${ROOTFS_MOUNT}/etc/
 cp ${SCRIPT_PATH}/install_rootfs_second_stage.sh ${ROOTFS_MOUNT}
 chmod u+x ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
-sudo mount --bind /dev ${ROOTFS_MOUNT}/dev
+/bin/mknod -m 0666 ${ROOTFS_MOUNT}/dev/null c 1 3
+/bin/mknod -m 0666 ${ROOTFS_MOUNT}/dev/random c 1 8
+/bin/mknod -m 0444 ${ROOTFS_MOUNT}/dev/urandom c 1 9
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh"
 
 # remove chroot helpers

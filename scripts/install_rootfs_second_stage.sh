@@ -10,9 +10,6 @@ export LC_ALL=C LANGUAGE=C LANG=C
 cp -a /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 dpkg --configure -a
-mount proc -t proc /proc
-dpkg --configure -a
-umount proc
 
 echo 'root:root' | chpasswd
 echo 'CX9020' > /etc/hostname
