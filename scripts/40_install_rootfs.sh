@@ -28,7 +28,6 @@ chmod u+x ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh"
 
 # remove chroot helpers
-sudo umount ${ROOTFS_MOUNT}/dev
 rm ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 rm ${ROOTFS_MOUNT}/etc/resolv.conf
 rm ${ROOTFS_MOUNT}/usr/bin/qemu-arm-static

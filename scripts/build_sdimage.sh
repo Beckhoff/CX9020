@@ -37,5 +37,5 @@ dd if=${UBOOT} of=${RAMDISK_IMAGE} seek=2 bs=512 conv=notrunc
 sfdisk --force --in-order --Linux --unit M ${RAMDISK_IMAGE} < ${PARTITION_CONFIG}
 
 mkdir -p ${ROOTFS_MOUNT}
-mount ${ROOTFS_MOUNT}
+mount ${RAMDISK_IMAGE} ${ROOTFS_MOUNT} -o loop,offset=1048576
 mv ${TMP_MOUNT}/* ${ROOTFS_MOUNT}/
