@@ -57,7 +57,7 @@ make etherlab
 
 #install etherlab (optional):
 #=============================
-./scripts/52_install_etherlab.sh /dev/sdc1
+./scripts/52_install_etherlab.sh /tmp/rootfs
 ```
 ##Usage
 The standard login on first boot:
