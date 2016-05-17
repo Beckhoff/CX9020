@@ -25,6 +25,7 @@ git checkout -b dev-${RT_VERSION} v${RT_VERSION}
 git am < ../kernel-patches/0001-clk-imx5-ipu_di_sel-clocks-can-set-parent-rates.patch
 git am < ../kernel-patches/0002-imx-parallel-display-add-ddc-support.patch
 git am < ../kernel-patches/0003-ARM-dts-imx-add-CX9020-Embedded-PC-device-tree.patch
+git am < ../kernel-patches/0005-ARM-dts-imx-add-rtc-for-CX9020.patch
 
 # apply prepared config
 cp -a ../kernel-patches/config-CX9020 .config

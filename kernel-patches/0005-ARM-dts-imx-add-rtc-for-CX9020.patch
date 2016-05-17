@@ -1,0 +1,32 @@
+From c4b996de743e1e2e608ce50fd5740ccce0cd6cbd Mon Sep 17 00:00:00 2001
+From: Patrick Bruenn <p.bruenn@beckhoff.com>
+Date: Tue, 17 May 2016 08:16:41 +0200
+Subject: [PATCH 5/5] ARM: dts: imx: add rtc for CX9020
+
+---
+ arch/arm/boot/dts/imx53-cx9020.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx53-cx9020.dts b/arch/arm/boot/dts/imx53-cx9020.dts
+index fbc29f3..2fbab3c 100644
+--- a/arch/arm/boot/dts/imx53-cx9020.dts
++++ b/arch/arm/boot/dts/imx53-cx9020.dts
+@@ -83,6 +83,15 @@
+ 		};
+ 	};
+ 
++	rtc: rtc@53fa4000 {
++		compatible = "fsl,imx53-rtc", "fsl,imx25-rtc";
++		reg = <0x53fa4000 0x4000>;
++		interrupts = <24>;
++		interrupt-parent = <&tzic>;
++		clocks = <&clks IMX5_CLK_SRTC_GATE>;
++		clock-names = "ipg";
++	};
++
+ 	regulators {
+ 		compatible = "simple-bus";
+ 		#address-cells = <1>;
+-- 
+1.9.1
+
