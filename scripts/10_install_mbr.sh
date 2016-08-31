@@ -11,6 +11,13 @@ fi
 DISK=$1
 MBR=tools/mbr.bin
 PARTITION_CONFIG=tools/partitions.sfdisk
+SFDISK_VERSION=$(LC_ALL=C sfdisk -v | awk '{ print $4 }')
+
+if [[ ${SFDISK_VERSION} < "2.26.1" ]]; then
+	SFDISK_OPTIONS="--force --in-order --Linux --unit M"
+else
+	SFDISK_OPTIONS="--force"
+fi
 
 sudo umount ${DISK}* || /bin/true
 
@@ -20,5 +27,5 @@ sudo dd if=${MBR} of=${DISK}
 sync
 
 # create partition for rootfs
-sudo sfdisk --force --in-order --Linux --unit M ${DISK} < ${PARTITION_CONFIG}
+sudo sfdisk ${SFDISK_OPTIONS} ${DISK} < ${PARTITION_CONFIG}
 sudo partprobe ${DISK}
