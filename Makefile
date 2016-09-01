@@ -2,8 +2,9 @@ ETHERLAB=ethercat-hg
 KERNEL=kernel
 UBOOT=u-boot
 
-CROSS_PATH=$(shell pwd)/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin
-CROSS_PREFIX=$(shell pwd)/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
+LINARO=gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf
+CROSS_PATH=$(shell pwd)/tools/${LINARO}/bin
+CROSS_PREFIX=${CROSS_PATH}/arm-linux-gnueabihf-
 
 etherlab:
 	cd ${ETHERLAB} && ./configure --host=arm-linux-gnueabihf --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --disable-tool --enable-ccat PATH=${CROSS_PATH}:${PATH}
