@@ -11,5 +11,5 @@ fi
 DISK=$1
 UBOOT=u-boot
 
-sudo dd if=${UBOOT}/u-boot.imx of=${DISK} seek=2 bs=512
+sudo dd if=${UBOOT}/u-boot.imx of=${DISK} seek=2 bs=512 conv=notrunc
 sync
