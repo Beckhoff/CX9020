@@ -1,8 +1,33 @@
+From d66fb6d838cca49fa4f03a7bc0fc932962c5c19b Mon Sep 17 00:00:00 2001
+From: Patrick Bruenn <p.bruenn@beckhoff.com>
+Date: Thu, 1 Sep 2016 08:18:34 +0200
+Subject: [PATCH 2/2] board: mx53cx9020: add support for Beckhoff CX9020-0100
+
+---
+ arch/arm/Kconfig                             |   5 +
+ board/beckhoff/mx53cx9020/Kconfig            |  15 +
+ board/beckhoff/mx53cx9020/MAINTAINERS        |   6 +
+ board/beckhoff/mx53cx9020/Makefile           |   9 +
+ board/beckhoff/mx53cx9020/imximage.cfg       |  82 ++++
+ board/beckhoff/mx53cx9020/mx53cx9020.c       | 569 +++++++++++++++++++++++++++
+ board/beckhoff/mx53cx9020/mx53cx9020_video.c |  83 ++++
+ configs/mx53cx9020_defconfig                 |  18 +
+ include/configs/mx53cx9020.h                 | 343 ++++++++++++++++
+ 9 files changed, 1130 insertions(+)
+ create mode 100644 board/beckhoff/mx53cx9020/Kconfig
+ create mode 100644 board/beckhoff/mx53cx9020/MAINTAINERS
+ create mode 100644 board/beckhoff/mx53cx9020/Makefile
+ create mode 100644 board/beckhoff/mx53cx9020/imximage.cfg
+ create mode 100644 board/beckhoff/mx53cx9020/mx53cx9020.c
+ create mode 100644 board/beckhoff/mx53cx9020/mx53cx9020_video.c
+ create mode 100644 configs/mx53cx9020_defconfig
+ create mode 100644 include/configs/mx53cx9020.h
+
 diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 9908b43..4d28f89 100644
+index 3237a74..5f67362 100644
 --- a/arch/arm/Kconfig
 +++ b/arch/arm/Kconfig
-@@ -493,6 +493,10 @@ config TARGET_MX53LOCO
+@@ -546,6 +546,10 @@ config TARGET_MX53LOCO
  	bool "Support mx53loco"
  	select CPU_V7
  
@@ -13,14 +38,14 @@ index 9908b43..4d28f89 100644
  config TARGET_MX53SMD
  	bool "Support mx53smd"
  	select CPU_V7
-@@ -914,6 +918,7 @@ source "board/freescale/mx51evk/Kconfig"
+@@ -948,6 +952,7 @@ source "board/freescale/mx51evk/Kconfig"
  source "board/freescale/mx53ard/Kconfig"
  source "board/freescale/mx53evk/Kconfig"
  source "board/freescale/mx53loco/Kconfig"
 +source "board/beckhoff/mx53cx9020/Kconfig"
  source "board/freescale/mx53smd/Kconfig"
- source "board/freescale/mx6qarm2/Kconfig"
- source "board/freescale/mx6qsabreauto/Kconfig"
+ source "board/freescale/s32v234evb/Kconfig"
+ source "board/freescale/vf610twr/Kconfig"
 diff --git a/board/beckhoff/mx53cx9020/Kconfig b/board/beckhoff/mx53cx9020/Kconfig
 new file mode 100644
 index 0000000..6b60ce3
@@ -159,10 +184,10 @@ index 0000000..c6bdc72
 +DATA 4 0x63fd901c 0x00000000
 diff --git a/board/beckhoff/mx53cx9020/mx53cx9020.c b/board/beckhoff/mx53cx9020/mx53cx9020.c
 new file mode 100644
-index 0000000..7290856
+index 0000000..dd4f189
 --- /dev/null
 +++ b/board/beckhoff/mx53cx9020/mx53cx9020.c
-@@ -0,0 +1,565 @@
+@@ -0,0 +1,569 @@
 +/*
 + * Copyright (C) 2015  Beckhoff Automation GmbH & Co. KG
 + * Patrick Bruenn <p.bruenn@beckhoff.com>
@@ -461,13 +486,17 @@ index 0000000..7290856
 +#define UART_PAD_CTRL	(PAD_CTL_HYS | PAD_CTL_DSE_HIGH | \
 +			 PAD_CTL_PUS_100K_UP | PAD_CTL_ODE)
 +
++#define MX53_PAD_EIM_D26__UART2_RXD_MUX IOMUX_PAD(0x48c, 0x144, 2, 0x880, 0, MX53_UART_PAD_CTRL)
++#define MX53_PAD_EIM_D27__UART2_TXD_MUX IOMUX_PAD(0x490, 0x148, 2, 0x000, 0, MX53_UART_PAD_CTRL)
++#define MX53_PAD_EIM_D28__UART2_RTS     IOMUX_PAD(0x494, 0x14c, 2, 0x87C, 0, MX53_UART_PAD_CTRL)
++#define MX53_PAD_EIM_D29__UART2_CTS     IOMUX_PAD(0x498, 0x150, 2, 0x000, 0, MX53_UART_PAD_CTRL)
 +static void setup_iomux_uart(void)
 +{
 +	static const iomux_v3_cfg_t uart_pads[] = {
-+		NEW_PAD_CTRL(MX53_PAD_EIM_D27__UART2_RXD_MUX, UART_PAD_CTRL),
-+		NEW_PAD_CTRL(MX53_PAD_EIM_D26__UART2_TXD_MUX, UART_PAD_CTRL),
-+		NEW_PAD_CTRL(MX53_PAD_EIM_D28__UART2_CTS, UART_PAD_CTRL),
-+		NEW_PAD_CTRL(MX53_PAD_EIM_D29__UART2_RTS, UART_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_EIM_D26__UART2_RXD_MUX, UART_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_EIM_D27__UART2_TXD_MUX, UART_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_EIM_D28__UART2_RTS, UART_PAD_CTRL),
++		NEW_PAD_CTRL(MX53_PAD_EIM_D29__UART2_CTS, UART_PAD_CTRL),
 +	};
 +
 +	imx_iomux_v3_setup_multiple_pads(uart_pads, ARRAY_SIZE(uart_pads));
@@ -819,21 +848,34 @@ index 0000000..0e7315e
 +}
 diff --git a/configs/mx53cx9020_defconfig b/configs/mx53cx9020_defconfig
 new file mode 100644
-index 0000000..cc4f1a4
+index 0000000..ed4a3da
 --- /dev/null
 +++ b/configs/mx53cx9020_defconfig
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,18 @@
 +CONFIG_ARM=y
 +CONFIG_TARGET_MX53CX9020=y
 +CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/beckhoff/mx53cx9020/imximage.cfg"
++CONFIG_BOOTDELAY=1
++CONFIG_HUSH_PARSER=y
++CONFIG_CMD_BOOTZ=y
 +# CONFIG_CMD_IMLS is not set
++CONFIG_CMD_MMC=y
++CONFIG_CMD_USB=y
 +# CONFIG_CMD_SETEXPR is not set
++CONFIG_CMD_DHCP=y
++CONFIG_CMD_MII=y
++CONFIG_CMD_PING=y
++CONFIG_CMD_EXT2=y
++CONFIG_CMD_EXT4=y
++CONFIG_CMD_FAT=y
++CONFIG_CMD_FS_GENERIC=y
++CONFIG_OF_LIBFDT=y
 diff --git a/include/configs/mx53cx9020.h b/include/configs/mx53cx9020.h
 new file mode 100644
-index 0000000..0a07eeb
+index 0000000..33afbcf
 --- /dev/null
 +++ b/include/configs/mx53cx9020.h
-@@ -0,0 +1,362 @@
+@@ -0,0 +1,343 @@
 +/*
 + * Copyright (C) 2015  Beckhoff Automation GmbH & Co. KG
 + * Patrick Bruenn <p.bruenn@beckhoff.com>
@@ -861,7 +903,7 @@ index 0000000..0a07eeb
 +#define CONFIG_SETUP_MEMORY_TAGS
 +#define CONFIG_INITRD_TAG
 +
-+#define CONFIG_SYS_GENERIC_BOARD
++#define CONFIG_SYS_FSL_CLK
 +
 +/* Size of malloc() pool */
 +#define CONFIG_SYS_MALLOC_LEN		(10 * 1024 * 1024)
@@ -880,19 +922,12 @@ index 0000000..0a07eeb
 +#define CONFIG_SYS_FSL_ESDHC_NUM	2
 +
 +#define CONFIG_MMC
-+#define CONFIG_CMD_MMC
 +#define CONFIG_GENERIC_MMC
-+#define CONFIG_CMD_FAT
-+#define CONFIG_CMD_EXT2
-+#define CONFIG_CMD_EXT4
-+#define CONFIG_CMD_FS_GENERIC
 +
 +/* CCAT FPGA Configs */
 +#define CONFIG_CMD_CCAT
 +
 +/* bootz: zImage/initrd.img support */
-+#define CONFIG_CMD_BOOTZ
-+#define CONFIG_SUPPORT_RAW_INITRD
 +#define CONFIG_DOS_PARTITION
 +
 +/* Eth Configs */
@@ -902,13 +937,7 @@ index 0000000..0a07eeb
 +#define IMX_FEC_BASE	FEC_BASE_ADDR
 +#define CONFIG_FEC_MXC_PHYADDR	0x1F
 +
-+#define CONFIG_CMD_PING
-+#define CONFIG_CMD_DHCP
-+#define CONFIG_CMD_MII
-+
 +/* USB Configs */
-+#define CONFIG_CMD_USB
-+#define CONFIG_CMD_FAT
 +#define CONFIG_USB_EHCI
 +#define CONFIG_USB_EHCI_MX5
 +#define CONFIG_USB_STORAGE
@@ -940,10 +969,7 @@ index 0000000..0a07eeb
 +#define CONFIG_BAUDRATE			115200
 +
 +/* Command definition */
-+#define CONFIG_CMD_BOOTZ
 +#define CONFIG_SUPPORT_RAW_INITRD
-+
-+#define CONFIG_BOOTDELAY	1
 +
 +#define CONFIG_ETHPRIME		"FEC0"
 +
@@ -1130,7 +1156,6 @@ index 0000000..0a07eeb
 +
 +/* Miscellaneous configurable options */
 +#define CONFIG_SYS_LONGHELP		/* undef to save memory */
-+#define CONFIG_SYS_HUSH_PARSER		/* use "hush" command parser */
 +#define CONFIG_AUTO_COMPLETE
 +#define CONFIG_SYS_CBSIZE		512	/* Console I/O Buffer Size */
 +
@@ -1169,8 +1194,6 @@ index 0000000..0a07eeb
 +#define CONFIG_ENV_IS_IN_MMC
 +#define CONFIG_SYS_MMC_ENV_DEV 0
 +
-+#define CONFIG_OF_LIBFDT
-+
 +#define CONFIG_CMD_SATA
 +#ifdef CONFIG_CMD_SATA
 +	#define CONFIG_DWC_AHSATA
@@ -1196,3 +1219,6 @@ index 0000000..0a07eeb
 +#define CONFIG_IPUV3_CLK	200000000
 +
 +#endif				/* __CONFIG_H */
+-- 
+1.9.1
+
