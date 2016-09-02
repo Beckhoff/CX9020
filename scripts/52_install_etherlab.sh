@@ -13,8 +13,9 @@ ROOTFS_MOUNT=$1
 ETHERLAB=ethercat-hg
 KERNEL=kernel
 
-CROSS_PATH=`pwd`/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin
-CROSS_PREFIX=`pwd`/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
+LINARO=gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf
+CROSS_PATH=`pwd`/tools/${LINARO}/bin
+CROSS_PREFIX=${CROSS_PATH}/arm-linux-gnueabihf-
 
 pushd ${ETHERLAB}
 make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
