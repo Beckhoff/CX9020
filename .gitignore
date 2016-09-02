@@ -1,4 +1,5 @@
-tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux*
+tools/gcc-linaro-*
+tools/libtool-*
 ethercat-hg
 kernel
 u-boot
