@@ -1,4 +1,4 @@
-From dcf4a5da2377a02a053464fe3e4d19378b416cde Mon Sep 17 00:00:00 2001
+From 5c4836ee876891b4a3aa42c19f4fc5e5dcb15367 Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Fri, 18 Dec 2015 08:35:16 +0100
 Subject: [PATCH 2/5] imx: parallel-display: add ddc support

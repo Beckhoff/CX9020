@@ -1,4 +1,4 @@
-From 164e31d97dd46006f6a2d49f417357572d08fd90 Mon Sep 17 00:00:00 2001
+From 2c5f0d79c4224bb49abb667d0d41dcc852d7fa2b Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Fri, 18 Dec 2015 10:46:10 +0100
 Subject: [PATCH 5/5] net: phy: multiplex switch phy ports
@@ -13,7 +13,7 @@ the multiplexing behaviour if set to > 1.
  1 file changed, 45 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 55f0178..94affd4 100644
+index f761288..0972502 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
 @@ -41,6 +41,10 @@ MODULE_DESCRIPTION("PHY library");
@@ -27,7 +27,7 @@ index 55f0178..94affd4 100644
  void phy_device_free(struct phy_device *phydev)
  {
  	put_device(&phydev->dev);
-@@ -1058,6 +1062,31 @@ int genphy_read_status(struct phy_device *phydev)
+@@ -1092,6 +1096,31 @@ int genphy_read_status(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_read_status);
  
@@ -59,7 +59,7 @@ index 55f0178..94affd4 100644
  static int gen10g_read_status(struct phy_device *phydev)
  {
  	int devad, reg;
-@@ -1106,6 +1135,20 @@ int genphy_soft_reset(struct phy_device *phydev)
+@@ -1140,6 +1169,20 @@ int genphy_soft_reset(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_soft_reset);
  
@@ -80,7 +80,7 @@ index 55f0178..94affd4 100644
  int genphy_config_init(struct phy_device *phydev)
  {
  	int val;
-@@ -1363,14 +1406,14 @@ static struct phy_driver genphy_driver[] = {
+@@ -1397,14 +1440,14 @@ static struct phy_driver genphy_driver[] = {
  	.phy_id		= 0xffffffff,
  	.phy_id_mask	= 0xffffffff,
  	.name		= "Generic PHY",

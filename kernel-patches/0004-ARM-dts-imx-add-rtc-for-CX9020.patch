@@ -1,4 +1,4 @@
-From 64cd313852ef1d9f6849f5940c82891df5eb8282 Mon Sep 17 00:00:00 2001
+From 45b68c188656e208a36276eebd15c58a6b084e4b Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Tue, 17 May 2016 08:16:41 +0200
 Subject: [PATCH 4/5] ARM: dts: imx: add rtc for CX9020
