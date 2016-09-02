@@ -1,7 +1,7 @@
-From e985a0f6026ba3bdfa50dc3a4c8fad4abeb8ca30 Mon Sep 17 00:00:00 2001
+From 164e31d97dd46006f6a2d49f417357572d08fd90 Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Fri, 18 Dec 2015 10:46:10 +0100
-Subject: [PATCH 4/4] net: phy: multiplex switch phy ports
+Subject: [PATCH 5/5] net: phy: multiplex switch phy ports
 
 Devices such as CX9020 Embedded PC with only one ethernet controller
 integrate internal switches to provide more than one RJ45 port.
@@ -13,7 +13,7 @@ the multiplexing behaviour if set to > 1.
  1 file changed, 45 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 0bfbaba..07058fb 100644
+index 55f0178..94affd4 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
 @@ -41,6 +41,10 @@ MODULE_DESCRIPTION("PHY library");
@@ -27,7 +27,7 @@ index 0bfbaba..07058fb 100644
  void phy_device_free(struct phy_device *phydev)
  {
  	put_device(&phydev->dev);
-@@ -1116,6 +1120,31 @@ int genphy_read_status(struct phy_device *phydev)
+@@ -1058,6 +1062,31 @@ int genphy_read_status(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_read_status);
  
@@ -59,7 +59,7 @@ index 0bfbaba..07058fb 100644
  static int gen10g_read_status(struct phy_device *phydev)
  {
  	int devad, reg;
-@@ -1164,6 +1193,20 @@ int genphy_soft_reset(struct phy_device *phydev)
+@@ -1106,6 +1135,20 @@ int genphy_soft_reset(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_soft_reset);
  
@@ -80,7 +80,7 @@ index 0bfbaba..07058fb 100644
  int genphy_config_init(struct phy_device *phydev)
  {
  	int val;
-@@ -1442,14 +1485,14 @@ static struct phy_driver genphy_driver[] = {
+@@ -1363,14 +1406,14 @@ static struct phy_driver genphy_driver[] = {
  	.phy_id		= 0xffffffff,
  	.phy_id_mask	= 0xffffffff,
  	.name		= "Generic PHY",
