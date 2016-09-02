@@ -6,7 +6,7 @@ set -e
 
 if [ "$#" -ne 3 ]; then
 
-        echo -e "Usage:\n $0 <VERSION> <PATCH> <RT-PATCH>\n\nexample: to checkout kernel 4.1.12 with rt13\n $0 4.1 12 13"
+        echo -e "Usage:\n $0 <VERSION> <PATCH> <RT-PATCH>\n\nexample: to checkout kernel 4.1.31 with rt35\n $0 4.1 31 35"
         exit 64
 fi
 
