@@ -1,0 +1,40 @@
+From 4b6901a471e8df8c2bf0f20a0912aa5367aedf30 Mon Sep 17 00:00:00 2001
+From: Patrick Bruenn <p.bruenn@beckhoff.com>
+Date: Mon, 5 Sep 2016 18:33:26 +0200
+Subject: [PATCH 2/5] imx53.dtsi: Add IPU nodes for csi
+
+We have the following messages that tell csi devices are not used:
+imx-ipuv3 18000000.ipu: no port@0 node in /soc/ipu@18000000, not using
+CSI0
+imx-ipuv3 18000000.ipu: no port@1 node in /soc/ipu@18000000, not using
+CSI1
+
+So we add them in the common device tree to make CSI ports available on
+imx53 boards.
+---
+ arch/arm/boot/dts/imx53.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx53.dtsi b/arch/arm/boot/dts/imx53.dtsi
+index cd17037..2a365c4 100644
+--- a/arch/arm/boot/dts/imx53.dtsi
++++ b/arch/arm/boot/dts/imx53.dtsi
+@@ -136,6 +136,15 @@
+ 			clock-names = "bus", "di0", "di1";
+ 			resets = <&src 2>;
+ 
++
++			ipu_csi0: port@0 {
++				reg = <0>;
++			};
++
++			ipu_csi1: port@1 {
++				reg = <1>;
++			};
++
+ 			ipu_di0: port@2 {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+-- 
+1.9.1
+

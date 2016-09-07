@@ -1,0 +1,43 @@
+From 668f089b215f242aa8963df0b26dccf0b6df9066 Mon Sep 17 00:00:00 2001
+From: Patrick Bruenn <p.bruenn@beckhoff.com>
+Date: Wed, 7 Sep 2016 08:38:52 +0200
+Subject: [PATCH 3/5] drm/panel: simple: Add support for ddc-only panel
+
+This is a fix for the CX9020 Embedded PC. On that device the 24-bit
+parallel-display signal of the the imx53 is combined with an I2C channel
+and converted to DVI-D port. Devicetree magic always requires a panel
+connected to the parallel-display port. To omit simply hack in an
+existing compatible panel, this patch adds an empty panel_desc to be
+used for panels with ddc data.
+---
+ drivers/gpu/drm/panel/panel-simple.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index f97b73e..03f7e6c 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -1096,6 +1096,10 @@ static const struct panel_desc shelly_sca07010_bfn_lnn = {
+ 	.bus_format = MEDIA_BUS_FMT_RGB666_1X18,
+ };
+ 
++static const struct panel_desc simple_ddc_only = {
++};
++
++
+ static const struct of_device_id platform_of_match[] = {
+ 	{
+ 		.compatible = "ampire,am800480r3tmqwa1h",
+@@ -1191,6 +1195,9 @@ static const struct of_device_id platform_of_match[] = {
+ 		.compatible = "shelly,sca07010-bfn-lnn",
+ 		.data = &shelly_sca07010_bfn_lnn,
+ 	}, {
++		.compatible = "simple,ddc-only",
++		.data = &simple_ddc_only,
++	}, {
+ 		/* sentinel */
+ 	}
+ };
+-- 
+1.9.1
+

@@ -1,4 +1,4 @@
-From 5a0e668240d68d056f9cd19e7a1d190742e9f690 Mon Sep 17 00:00:00 2001
+From 113328f6b779413743d170bb176603fb4575f23f Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Fri, 18 Dec 2015 08:31:56 +0100
 Subject: [PATCH 1/5] clk: imx5: ipu_di_sel clocks can set parent rates
@@ -17,10 +17,10 @@ Signed-off-by: Patrick Bruenn <p.bruenn@beckhoff.com>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/clk/imx/clk-imx51-imx53.c b/drivers/clk/imx/clk-imx51-imx53.c
-index a7e4f39..cd1faa40 100644
+index c677034..29d4c44 100644
 --- a/drivers/clk/imx/clk-imx51-imx53.c
 +++ b/drivers/clk/imx/clk-imx51-imx53.c
-@@ -503,10 +503,10 @@ static void __init mx53_clocks_init(struct device_node *np)
+@@ -519,10 +519,10 @@ static void __init mx53_clocks_init(struct device_node *np)
  						mx53_ldb_di0_sel, ARRAY_SIZE(mx53_ldb_di0_sel), CLK_SET_RATE_PARENT);
  	clk[IMX5_CLK_LDB_DI0_GATE]	= imx_clk_gate2("ldb_di0_gate", "ldb_di0_div", MXC_CCM_CCGR6, 28);
  	clk[IMX5_CLK_LDB_DI1_GATE]	= imx_clk_gate2("ldb_di1_gate", "ldb_di1_div", MXC_CCM_CCGR6, 30);
