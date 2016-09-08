@@ -14,12 +14,14 @@ KERNEL=kernel
 kernel_version=`cat ${KERNEL}/include/config/kernel.release`
 CCAT_FIRMWARE=tools/ccat.rbf
 
-CC=`pwd`/tools/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
+LINARO=gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf
+CROSS_PATH=`pwd`/tools/${LINARO}/bin
+CROSS_PREFIX=${CROSS_PATH}/arm-linux-gnueabihf-
 
 # install kernel
 pushd ${KERNEL}
 rm -rf ${ROOTFS_MOUNT}/lib/modules/${kernel_version}/
-make ARCH=arm CROSS_COMPILE=${CC} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
+make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
 popd
 mkdir -p ${ROOTFS_MOUNT}/boot
 cp -v ${KERNEL}/arch/arm/boot/zImage ${ROOTFS_MOUNT}/boot/vmlinuz-${kernel_version}
