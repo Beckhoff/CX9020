@@ -27,7 +27,7 @@ cd CX9020/
 
 #get and patch the u-boot sources:
 #=================================
-./tools/prepare_uboot.sh v2015.07
+./tools/prepare_uboot.sh v2016.07
 
 #build u-boot:
 #=============
@@ -35,7 +35,7 @@ make uboot
 
 #get and patch a rt kernel:
 #==========================
-./tools/prepare_kernel.sh 4.1 12 13
+./tools/prepare_kernel.sh 4.4 19 27
 
 #configure and build the kernel:
 #===============================
