@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -o nounset
 
 if [ $# -ne 1 ]; then
 	echo -e "Usage:\n $0 <u-boot version>\n\nexample:\n $0 v2016.07"
