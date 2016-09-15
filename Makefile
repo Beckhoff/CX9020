@@ -5,23 +5,24 @@ UBOOT=u-boot
 LINARO=gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf
 CROSS_PATH=$(shell pwd)/tools/${LINARO}/bin
 CROSS_PREFIX=${CROSS_PATH}/arm-linux-gnueabihf-
+MAKE_JOBS=-j `nproc`
 
 etherlab:
 	cd ${ETHERLAB} && ./configure --host=arm-linux-gnueabihf --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --disable-tool --enable-ccat PATH=${CROSS_PATH}:${PATH}
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} clean
-	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} PATH=${CROSS_PATH}:${PATH}
-	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} modules
+	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} PATH=${CROSS_PATH}:${PATH} ${MAKE_JOBS}
+	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS} modules
 
 uboot:
 	cd ${UBOOT} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} distclean
 	cd ${UBOOT} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} mx53cx9020_defconfig
-	cd ${UBOOT} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX}
+	cd ${UBOOT} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS}
 
 kernel:
 	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} oldconfig
 #	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} menuconfig
-	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX}
-	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} modules
+	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS}
+	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS} modules
 	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} imx53-cx9020.dtb
 	cp -a ${KERNEL}/.config kernel-patches/config-CX9020
 
