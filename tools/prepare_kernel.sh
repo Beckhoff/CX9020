@@ -4,16 +4,13 @@
 
 set -e
 
-if [ "$#" -ne 3 ]; then
+if [ "$#" -ne 1 ]; then
 
-        echo -e "Usage:\n $0 <VERSION> <PATCH> <RT-PATCH>\n\nexample: to checkout kernel 4.4.19 with rt27\n $0 4.4 19 27"
+        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample: to checkout kernel 4.4.19 with rt27\n $0 4.4.19-rt27"
         exit 64
 fi
 
-VERSION=$1
-PATCH=$2
-FULL_VERSION=${VERSION}.${PATCH}
-RT_VERSION=${FULL_VERSION}-rt${3}
+RT_VERSION=${1}
 REPO=kernel
 GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 #GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
