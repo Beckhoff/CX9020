@@ -24,11 +24,7 @@ pushd ${REPO}
 git checkout v${RT_VERSION} -b dev-${RT_VERSION}
 
 # apply cx9020 patches
-git am ../kernel-patches/0001-clk-imx5-ipu_di_sel-clocks-can-set-parent-rates.patch
-git am ../kernel-patches/0002-imx53.dtsi-Add-IPU-nodes-for-csi.patch
-git am ../kernel-patches/0003-drm-panel-simple-Add-support-for-ddc-only-panel.patch
-git am ../kernel-patches/0004-ARM-dts-imx-add-CX9020-Embedded-PC-device-tree.patch
-git am ../kernel-patches/0005-net-phy-multiplex-switch-phy-ports.patch
+git am -3  ../kernel-patches/000*
 
 # apply prepared config
 cp -a ../kernel-patches/config-CX9020 .config
