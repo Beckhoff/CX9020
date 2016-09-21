@@ -1,0 +1,28 @@
+build:
+  stage: build
+  variables:
+    DEBIAN_FRONTEND: 'noninteractive'
+    # set git user in clones to apply patches
+    GIT_CLONE_ARGS: '--config user.name="nobody" --config user.email="nobody@example.com"'
+    # use cache to clone linux
+    KERNEL_CLONE_ARGS: '--reference /home/gitcache/linux-stable-rt'
+    # use cache to clone u-boot
+    UBOOT_CLONE_ARGS: '--reference /home/gitcache/u-boot'
+  script:
+    # run readme steps
+    - sudo dpkg --add-architecture i386
+    - sudo apt update
+    # skip questions during package update
+    - sudo apt -q -y -o Dpkg::Options::="--force-confnew" install sudo multistrap qemu binfmt-support qemu-user-static mercurial libtool autoconf lib32z1 lib32ncurses5-dev lib32stdc++6 git make xz-utils bc wget gcc-5-arm-linux-gnueabihf
+    - sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
+    - tools/prepare_uboot.sh v2016.07
+    - make uboot
+    - tools/prepare_kernel.sh 4.4.19-rt27
+    - make kernel
+    - tools/prepare_etherlab.sh
+    - make etherlab
+    # create image instead of writing to device
+    - sudo scripts/build_sdimage.sh
+  artifacts:
+    paths:
+      - sdcard.img
