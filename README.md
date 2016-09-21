@@ -6,14 +6,11 @@ Please make sure to follow the steps below to create your microSD card.
 
 ##Installation
 ```
-#prepare your machine f.e.: 64-bit Ubuntu 14.04 LTS would require:
+#prepare your machine f.e.: 64-bit Ubuntu 16.04 LTS would require:
 #===================================================================
 sudo dpkg --add-architecture i386
 sudo apt-get update
-sudo apt-get install -y multistrap qemu binfmt-support qemu-user-static mercurial libtool autoconf lib32z1 lib32ncurses5-dev lib32stdc++6 git make xz-utils bc wget
-
-# fix multistrap bug in Ubuntu 14.04
-sudo sed -i "s/\$forceyes //" /usr/sbin/multistrap
+sudo apt-get install -y multistrap qemu binfmt-support qemu-user-static mercurial libtool autoconf lib32z1 lib32ncurses5-dev lib32stdc++6 git make xz-utils bc wget gcc-5-arm-linux-gnueabihf
 
 
 # get the repository:
@@ -21,9 +18,9 @@ sudo sed -i "s/\$forceyes //" /usr/sbin/multistrap
 git clone https://github.com/Beckhoff/CX9020.git
 cd CX9020/
 
-#get and install a cross compiler:
+# link gcc-5-arm as default arm compiler
 #=================================
-./tools/install_linaro_gcc.sh
+sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
 
 #get and patch the u-boot sources:
 #=================================

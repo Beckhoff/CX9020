@@ -2,15 +2,13 @@ ETHERLAB=ethercat-hg
 KERNEL=kernel
 UBOOT=u-boot
 
-LINARO=gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf
-CROSS_PATH=$(shell pwd)/tools/${LINARO}/bin
-CROSS_PREFIX=${CROSS_PATH}/arm-linux-gnueabihf-
+CROSS_PREFIX=arm-linux-gnueabihf-
 MAKE_JOBS=-j `nproc`
 
 etherlab:
-	cd ${ETHERLAB} && ./configure --host=arm-linux-gnueabihf --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --disable-tool --enable-ccat PATH=${CROSS_PATH}:${PATH}
+	cd ${ETHERLAB} && ./configure --host=arm-linux-gnueabihf --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --disable-tool --enable-ccat
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} clean
-	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} PATH=${CROSS_PATH}:${PATH} ${MAKE_JOBS}
+	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS}
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS} modules
 
 uboot:
