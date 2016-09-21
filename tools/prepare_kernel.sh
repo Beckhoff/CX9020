@@ -16,7 +16,7 @@ GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 #GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
 
 # clone a clean linux-rt-devel repository
-git clone ${GIT_REMOTE} ${REPO} ${GIT_CLONE_ARGS}
+git clone ${GIT_REMOTE} ${REPO} ${GIT_CLONE_ARGS} ${KERNEL_CLONE_ARGS}
 pushd ${REPO}
 git checkout v${RT_VERSION} -b dev-${RT_VERSION}
 
