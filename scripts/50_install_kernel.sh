@@ -14,9 +14,7 @@ KERNEL=kernel
 kernel_version=`cat ${KERNEL}/include/config/kernel.release`
 CCAT_FIRMWARE=tools/ccat.rbf
 
-LINARO=gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf
-CROSS_PATH=`pwd`/tools/${LINARO}/bin
-CROSS_PREFIX=${CROSS_PATH}/arm-linux-gnueabihf-
+CROSS_PREFIX=arm-linux-gnueabihf-
 
 # install kernel
 pushd ${KERNEL}
