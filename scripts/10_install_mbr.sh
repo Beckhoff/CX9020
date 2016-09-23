@@ -11,13 +11,7 @@ fi
 DISK=$1
 MBR=tools/mbr.bin
 PARTITION_CONFIG=tools/partitions.sfdisk
-SFDISK_VERSION=$(LC_ALL=C sfdisk -v | awk '{ print $4 }')
-
-if [[ ${SFDISK_VERSION} < "2.26.1" ]]; then
-	SFDISK_OPTIONS="--force --in-order --Linux --unit M"
-else
-	SFDISK_OPTIONS="--force"
-fi
+SFDISK_OPTIONS="--force"
 
 sudo umount ${DISK}* || /bin/true
 

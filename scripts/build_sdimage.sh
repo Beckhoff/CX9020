@@ -20,14 +20,7 @@ UBOOT=u-boot/u-boot.imx
 MBR=tools/mbr.bin
 PARTITION_CONFIG=tools/partitions.sfdisk
 SCRIPT_PATH="`dirname \"$0\"`"
-
-SFDISK_VERSION=$(LC_ALL=C sfdisk -v | awk '{ print $4 }')
-
-if [[ ${SFDISK_VERSION} < "2.26.1" ]]; then
-        SFDISK_OPTIONS="--force --in-order --Linux --unit M"
-else
-        SFDISK_OPTIONS="--force"
-fi
+SFDISK_OPTIONS="--force"
 
 trap cleanup INT TERM EXIT
 
