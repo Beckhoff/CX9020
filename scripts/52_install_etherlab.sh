@@ -17,7 +17,7 @@ CROSS_PREFIX=arm-linux-gnueabihf-
 
 pushd ${ETHERLAB}
 make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
-make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} DESTDIR=${ROOTFS_MOUNT} PATH=${PATH}:${CROSS_PATH} install
+make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} DESTDIR=${ROOTFS_MOUNT} install
 popd
 
 mkdir -p ${ROOTFS_MOUNT}/etc/sysconfig/
