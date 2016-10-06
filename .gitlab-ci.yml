@@ -17,7 +17,7 @@ build:
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
     - tools/prepare_uboot.sh v2016.07
     - make uboot
-    - tools/prepare_kernel.sh 4.4.19-rt27
+    - tools/prepare_kernel.sh 4.4.23-rt33
     - make kernel
     - tools/prepare_etherlab.sh
     - make etherlab
