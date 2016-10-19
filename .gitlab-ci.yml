@@ -5,9 +5,9 @@ build:
     # set git user in clones to apply patches
     GIT_CLONE_ARGS: '--config user.name="nobody" --config user.email="nobody@example.com"'
     # use cache to clone linux
-    KERNEL_CLONE_ARGS: '--reference /home/gitcache/linux-stable-rt'
+    KERNEL_CLONE_ARGS: '--reference /home/gitcaches/linux-stable-rt.reference'
     # use cache to clone u-boot
-    UBOOT_CLONE_ARGS: '--reference /home/gitcache/u-boot'
+    UBOOT_CLONE_ARGS: '--reference /home/gitcaches/u-boot.reference'
   script:
     # run readme steps
     - sudo dpkg --add-architecture i386
