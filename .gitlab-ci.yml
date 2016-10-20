@@ -1,3 +1,7 @@
+stages:
+  - build
+  - cleanup
+
 build:
   stage: build
   variables:
@@ -26,5 +30,7 @@ build:
   artifacts:
     paths:
       - sdcard.img
-  after_script:
+cleanup:
+  stage: cleanup
+  script:
     - sudo shutdown
