@@ -6,7 +6,7 @@ set -e
 
 if [ "$#" -ne 1 ]; then
 
-        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample: to checkout kernel 4.4.23 with rt33\n $0 4.4.23-rt33"
+        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample:\n $0 4.4.27-rt37"
         exit 64
 fi
 
