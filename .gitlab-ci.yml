@@ -32,5 +32,6 @@ build:
       - sdcard.img
 cleanup:
   stage: cleanup
+  when: always
   script:
     - sudo shutdown
