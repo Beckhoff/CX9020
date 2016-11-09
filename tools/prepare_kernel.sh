@@ -6,7 +6,7 @@ set -e
 
 if [ "$#" -ne 1 ]; then
 
-        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample:\n $0 4.4.27-rt37"
+        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample:\n $0 v4.4.27-rt38"
         exit 64
 fi
 
@@ -18,7 +18,7 @@ GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 # clone a clean linux-rt-devel repository
 git clone ${GIT_REMOTE} ${REPO} ${GIT_CLONE_ARGS} ${KERNEL_CLONE_ARGS}
 pushd ${REPO}
-git checkout v${RT_VERSION} -b dev-${RT_VERSION}
+git checkout ${RT_VERSION} -b dev-${RT_VERSION}
 
 # apply cx9020 patches
 git am -3  ../kernel-patches/000*
