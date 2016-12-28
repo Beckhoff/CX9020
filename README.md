@@ -1,6 +1,6 @@
 #CX9020
 
-This repository provides Scripts and Patches to build a basic Linux (Debian) System for a Beckhoff CX9020 Controller.
+This repository provides Scripts and Patches to build a basic Linux (Debian) System for a [Beckhoff CX9020 Controller](https://www.beckhoff.de/default.asp?embedded_pc/cx9020.htm).
 It only works with devices which are ordered with a special ordering number (CX9020-0100) which ensures that the device boots directly from the microSD card instead of using the internal bootloader.
 Please make sure to follow the steps below to create your microSD card.
 
