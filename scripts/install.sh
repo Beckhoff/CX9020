@@ -18,6 +18,7 @@ ${SCRIPT_PATH}/20_install_uboot.sh ${DISK}
 ${SCRIPT_PATH}/30_install_partition.sh ${PARTITION} ${ROOTFS_MOUNT}
 ${SCRIPT_PATH}/40_install_rootfs.sh ${ROOTFS_MOUNT}
 ${SCRIPT_PATH}/50_install_kernel.sh ${ROOTFS_MOUNT}
-${SCRIPT_PATH}/52_install_etherlab.sh ${ROOTFS_MOUNT}
+#optional
+#${SCRIPT_PATH}/52_install_etherlab.sh ${ROOTFS_MOUNT}
 ${SCRIPT_PATH}/60_install_configuration.sh ${ROOTFS_MOUNT}
 sudo umount ${ROOTFS_MOUNT}
