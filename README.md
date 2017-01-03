@@ -50,7 +50,7 @@ make etherlab
 #============================================
 #BE CAREFUL to specify the correct device name,
 #or you might end up deleting your host's root partition!
-./scripts/install.sh /dev/sdc
+./scripts/install.sh /dev/sdc /tmp/rootfs
 
 #install etherlab (optional):
 #=============================

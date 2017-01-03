@@ -3,14 +3,14 @@
 set -e
 set -o nounset
 
-if [ $# -ne 1 ]; then
-	echo -e "Usage:\n $0 <disk>\n\nexample:\n $0 /dev/sdc\n\n"
+if [ $# -ne 2 ]; then
+	echo -e "Usage:\n $0 <disk>\n\nexample:\n $0 /dev/sdc /tmp/rootfs\n\n"
 	exit -1
 fi
 
 DISK=$1
 PARTITION=${DISK}1
-ROOTFS_MOUNT=/media/rootfs
+ROOTFS_MOUNT=$2
 SCRIPT_PATH="`dirname \"$0\"`"
 
 ${SCRIPT_PATH}/10_install_mbr.sh ${DISK}
