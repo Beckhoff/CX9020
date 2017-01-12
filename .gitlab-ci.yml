@@ -17,9 +17,9 @@ build:
     - sudo dpkg --add-architecture i386
     - sudo apt-get update
     # skip questions during package update
-    - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y multistrap qemu binfmt-support qemu-user-static mercurial libtool autoconf lib32z1 lib32ncurses5-dev lib32stdc++6 git make xz-utils bc wget gcc-5-arm-linux-gnueabihf
+    - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y autoconf bc binfmt-support device-tree-compiler gcc-5-arm-linux-gnueabihf git lib32ncurses5-dev lib32stdc++6 lib32z1 libtool make mercurial multistrap qemu qemu-user-static wget xz-utils
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
-    - tools/prepare_uboot.sh v2016.07
+    - tools/prepare_uboot.sh v2017.01
     - make uboot
     - tools/prepare_kernel.sh v4.4.38-rt49
     - make kernel

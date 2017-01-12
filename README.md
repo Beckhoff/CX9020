@@ -10,7 +10,7 @@ Please make sure to follow the steps below to create your microSD card.
 #===================================================================
 sudo dpkg --add-architecture i386
 sudo apt-get update
-sudo apt-get install -y multistrap qemu binfmt-support qemu-user-static mercurial libtool autoconf lib32z1 lib32ncurses5-dev lib32stdc++6 git make xz-utils bc wget gcc-5-arm-linux-gnueabihf
+sudo apt-get install -y autoconf bc binfmt-support device-tree-compiler gcc-5-arm-linux-gnueabihf git lib32ncurses5-dev lib32stdc++6 lib32z1 libtool make mercurial multistrap qemu qemu-user-static wget xz-utils
 
 
 # get the repository:
@@ -24,7 +24,7 @@ sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
 
 #get and patch the u-boot sources:
 #=================================
-./tools/prepare_uboot.sh v2016.07
+./tools/prepare_uboot.sh v2017.01
 
 #build u-boot:
 #=============
