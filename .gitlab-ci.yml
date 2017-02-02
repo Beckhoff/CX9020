@@ -1,6 +1,5 @@
 stages:
   - build
-  - cleanup
 
 build:
   stage: build
@@ -30,8 +29,3 @@ build:
   artifacts:
     paths:
       - sdcard.img
-cleanup:
-  stage: cleanup
-  when: always
-  script:
-    - sudo shutdown
