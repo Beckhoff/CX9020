@@ -17,6 +17,9 @@ CROSS_PREFIX=arm-linux-gnueabihf-
 
 pushd ${ETHERLAB}
 make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
+# This workaround is required to cross compile ethercat userspace tool for CX9020(armhf)
+# see https://github.com/sittner/ec-debianize/issues/2
+touch ./master/soe_errors.c
 make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} DESTDIR=${ROOTFS_MOUNT} install
 popd
 
