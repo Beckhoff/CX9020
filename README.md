@@ -10,17 +10,18 @@ Please make sure to follow the steps below to create your microSD card.
 #===================================================================
 sudo dpkg --add-architecture i386
 sudo apt-get update
-sudo apt-get install -y autoconf bc binfmt-support device-tree-compiler gcc-5-arm-linux-gnueabihf git lib32ncurses5-dev lib32stdc++6 lib32z1 libtool make mercurial multistrap qemu qemu-user-static wget xz-utils
+sudo apt-get install -y autoconf bc binfmt-support device-tree-compiler g++-4.9-arm-linux-gnueabihf gcc-4.9-arm-linux-gnueabihf git lib32ncurses5-dev lib32stdc++6 lib32z1 libtool make mercurial multistrap qemu qemu-user-static wget xz-utils
 
 
 # get the repository:
-#===================
+#====================
 git clone https://github.com/Beckhoff/CX9020.git
 cd CX9020/
 
 # link gcc-5-arm as default arm compiler
-#=================================
-sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
+#=======================================
+sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-4.9 /usr/bin/arm-linux-gnueabihf-gcc
+sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-4.9 /usr/bin/arm-linux-gnueabihf-gcc
 
 #get and patch the u-boot sources:
 #=================================
