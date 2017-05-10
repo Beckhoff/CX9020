@@ -15,6 +15,9 @@ REPO=kernel
 GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 #GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
 
+ccat_remote="${ccat_remote:-https://github.com/Beckhoff/CCAT}"
+ccat_branch="${ccat_branch:-master}"
+
 # clone a clean linux-rt-devel repository
 git clone ${GIT_REMOTE} ${REPO} ${GIT_CLONE_ARGS} ${KERNEL_CLONE_ARGS}
 pushd ${REPO}
@@ -25,3 +28,7 @@ git am -3  ../kernel-patches/000*
 
 # apply prepared config
 cp -a ../kernel-patches/config-CX9020 .config
+
+# clone ccat driver repository
+popd
+git clone -b ${ccat_branch} ${ccat_remote} ccat

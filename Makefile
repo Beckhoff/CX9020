@@ -1,12 +1,13 @@
 ETHERLAB=ethercat-hg
 KERNEL=kernel
 UBOOT=u-boot
+CCAT=ccat
 
 CROSS_PREFIX=arm-linux-gnueabihf-
 MAKE_JOBS=-j `nproc`
 
 etherlab:
-	cd ${ETHERLAB} && ./configure --host=arm-linux-gnueabihf --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --enable-ccat
+	cd ${ETHERLAB} && ./configure --host=arm-linux-gnueabihf --with-linux-dir=`pwd`/../${KERNEL} --disable-generic --disable-8139too --disable-eoe --enable-ccat_netdev
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} clean
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS}
 	cd ${ETHERLAB} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS} modules
@@ -23,5 +24,6 @@ kernel:
 	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS} modules
 	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} imx53-cx9020.dtb
 	cp -a ${KERNEL}/.config kernel-patches/config-CX9020
+	cd ${CCAT} && make MAKEFLAGS=ARCH=arm KDIR=$(CURDIR)/$(KERNEL) CROSS_COMPILE=${CROSS_PREFIX}
 
 .PHONY: busybox dropbear glibc kernel install uboot prepare_disk install_rootfs install_small install_smallrootfs post_install install_debian
