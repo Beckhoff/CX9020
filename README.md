@@ -1,10 +1,10 @@
-#CX9020
+# CX9020
 
 This repository provides Scripts and Patches to build a basic Linux (Debian) System for a [Beckhoff CX9020 Controller](https://www.beckhoff.com/default.asp?embedded_pc/cx9020.htm).
 It only works with devices which are ordered with a special ordering number (CX9020-0100) which ensures that the device boots directly from the microSD card instead of using the internal bootloader.
 Please make sure to follow the steps below to create your microSD card.
 
-##Installation
+## Installation
 ```
 #prepare your machine f.e.: 64-bit Ubuntu 16.04 LTS would require:
 #===================================================================
@@ -57,7 +57,7 @@ make etherlab
 #=============================
 ./scripts/52_install_etherlab.sh /tmp/rootfs
 ```
-##Usage
+## Usage
 The standard login on first boot:
 
 User:     root
@@ -66,5 +66,5 @@ Password: root
 
 Please change the root password immediately and additionally create your own user.
 
-##History
-TODO: Write history
+## History
+**TODO:** Write history
