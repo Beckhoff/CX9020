@@ -8,6 +8,7 @@ if [ $# -ne 1 ]; then
 fi
 
 VERSION=$1
+GIT_CLONE_ARGS=u-boot
 
 git clone git://git.denx.de/u-boot.git ${GIT_CLONE_ARGS} ${UBOOT_CLONE_ARGS}
 pushd u-boot/
