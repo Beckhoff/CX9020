@@ -1,7 +1,7 @@
-From a26bcafab84d9e1a25e3f3b19497e0134a9fc054 Mon Sep 17 00:00:00 2001
+From 6eb9b293c30e2ce0b849681754d38e9dd54d8cf8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Patrick=20Br=C3=BCnn?= <p.bruenn@beckhoff.com>
 Date: Wed, 2 Dec 2015 11:02:28 +0100
-Subject: [PATCH 4/5] ARM: dts: imx: add CX9020 Embedded PC device tree
+Subject: [PATCH 2/3] ARM: dts: imx: add CX9020 Embedded PC device tree
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -21,10 +21,10 @@ Signed-off-by: Patrick Brünn <p.bruenn@beckhoff.com>
  create mode 100644 arch/arm/boot/dts/imx53-cx9020.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 30bbc37..43b314a 100644
+index 7037201c5e3a..8063514ef73a 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -273,6 +273,7 @@ dtb-$(CONFIG_SOC_IMX53) += \
+@@ -317,6 +317,7 @@ dtb-$(CONFIG_SOC_IMX53) += \
  	imx53-ard.dtb \
  	imx53-m53evk.dtb \
  	imx53-mba53.dtb \
@@ -34,7 +34,7 @@ index 30bbc37..43b314a 100644
  	imx53-smd.dtb \
 diff --git a/arch/arm/boot/dts/imx53-cx9020.dts b/arch/arm/boot/dts/imx53-cx9020.dts
 new file mode 100644
-index 0000000..1eed57d
+index 000000000000..1eed57d7622e
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx53-cx9020.dts
 @@ -0,0 +1,377 @@
@@ -416,5 +416,5 @@ index 0000000..1eed57d
 +	status = "okay";
 +};
 -- 
-1.9.1
+2.11.0
 

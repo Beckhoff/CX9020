@@ -1,7 +1,7 @@
-From 130d6095f9f14f3e9af4b0f74d142b8f2c9fc732 Mon Sep 17 00:00:00 2001
+From cdabb0b269f32b1ccf25d83f81de30d912563462 Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Fri, 18 Dec 2015 10:46:10 +0100
-Subject: [PATCH 5/5] net: phy: multiplex switch phy ports
+Subject: [PATCH 3/3] net: phy: multiplex switch phy ports
 
 Devices such as CX9020 Embedded PC with only one ethernet controller
 integrate internal switches to provide more than one RJ45 port.
@@ -13,7 +13,7 @@ the multiplexing behaviour if set to > 1.
  1 file changed, 45 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 0bfbaba..07058fb 100644
+index c4ceb082e970..7b6ea12ff283 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
 @@ -41,6 +41,10 @@ MODULE_DESCRIPTION("PHY library");
@@ -26,8 +26,8 @@ index 0bfbaba..07058fb 100644
 +
  void phy_device_free(struct phy_device *phydev)
  {
- 	put_device(&phydev->dev);
-@@ -1116,6 +1120,31 @@ int genphy_read_status(struct phy_device *phydev)
+ 	put_device(&phydev->mdio.dev);
+@@ -1368,6 +1372,31 @@ int genphy_read_status(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_read_status);
  
@@ -46,8 +46,8 @@ index 0bfbaba..07058fb 100644
 + */
 +static int genphy_read_status_multiplexed(struct phy_device *phydev)
 +{
-+        for (phydev->addr = first_phy_addr; phydev->addr <= num_phys;
-+             ++phydev->addr) {
++        for (phydev->mdio.addr = first_phy_addr; phydev->mdio.addr <= num_phys;
++             ++phydev->mdio.addr) {
 +                int ret = genphy_read_status(phydev);
 +                if (ret || phydev->link) {
 +                        return ret;
@@ -59,7 +59,7 @@ index 0bfbaba..07058fb 100644
  static int gen10g_read_status(struct phy_device *phydev)
  {
  	int devad, reg;
-@@ -1164,6 +1193,20 @@ int genphy_soft_reset(struct phy_device *phydev)
+@@ -1416,6 +1445,20 @@ int genphy_soft_reset(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_soft_reset);
  
@@ -67,20 +67,20 @@ index 0bfbaba..07058fb 100644
 +{
 +        int ret;
 +
-+        for (phydev->addr = first_phy_addr; phydev->addr <= num_phys;
-+             ++phydev->addr) {
++        for (phydev->mdio.addr = first_phy_addr; phydev->mdio.addr <= num_phys;
++             ++phydev->mdio.addr) {
 +                ret = genphy_soft_reset(phydev);
 +                if (ret)
 +                        break;
 +        }
-+        phydev->addr = first_phy_addr;
++        phydev->mdio.addr = first_phy_addr;
 +        return ret;
 +}
 +
  int genphy_config_init(struct phy_device *phydev)
  {
  	int val;
-@@ -1442,14 +1485,14 @@ static struct phy_driver genphy_driver[] = {
+@@ -1698,14 +1741,14 @@ static struct phy_driver genphy_driver[] = {
  	.phy_id		= 0xffffffff,
  	.phy_id_mask	= 0xffffffff,
  	.name		= "Generic PHY",
@@ -96,7 +96,7 @@ index 0bfbaba..07058fb 100644
 +	.read_status	= genphy_read_status_multiplexed,
  	.suspend	= genphy_suspend,
  	.resume		= genphy_resume,
- 	.driver		= { .owner = THIS_MODULE, },
+ }, {
 -- 
-1.9.1
+2.11.0
 
