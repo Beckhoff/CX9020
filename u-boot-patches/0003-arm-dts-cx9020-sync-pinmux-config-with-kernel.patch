@@ -1,0 +1,127 @@
+From c46ff94f1a7f05e6f82f813e36fbdf20b564b278 Mon Sep 17 00:00:00 2001
+From: Patrick Bruenn <p.bruenn@beckhoff.com>
+Date: Mon, 24 Jul 2017 11:00:11 +0200
+Subject: [PATCH 3/3] arm: dts: cx9020: sync pinmux config with kernel
+
+Make pinmux configuration explicit and don't depend on reset values
+anymore.
+- Add pin configuration for SD-Card activity LEDs
+- Remove pin configuration for unused audio pins
+
+Signed-off-by: Patrick Bruenn <p.bruenn@beckhoff.com>
+---
+ arch/arm/dts/imx53-cx9020.dts | 71 +++++++++++++++++++------------------------
+ 1 file changed, 32 insertions(+), 39 deletions(-)
+
+diff --git a/arch/arm/dts/imx53-cx9020.dts b/arch/arm/dts/imx53-cx9020.dts
+index c928e727d5..8c7e353b05 100644
+--- a/arch/arm/dts/imx53-cx9020.dts
++++ b/arch/arm/dts/imx53-cx9020.dts
+@@ -30,33 +30,30 @@
+ 	imx53-qsb {
+ 		pinctrl_hog: hoggrp {
+ 			fsl,pins = <
+-				MX53_PAD_GPIO_0__CCM_SSI_EXT1_CLK 0x80000000
+-				MX53_PAD_GPIO_8__GPIO1_8          0x80000000
+-				MX53_PAD_PATA_DATA14__GPIO2_14    0x80000000
+-				MX53_PAD_PATA_DATA15__GPIO2_15    0x80000000
+-				MX53_PAD_GPIO_1__GPIO1_1          0x80000000
+-				MX53_PAD_GPIO_4__GPIO1_4          0x80000000
+-				MX53_PAD_PATA_DA_0__GPIO7_6       0x80000000
+-				MX53_PAD_PATA_DA_2__GPIO7_8	  0x80000000
+-				MX53_PAD_GPIO_16__GPIO7_11        0x80000000
+-
+-				MX53_PAD_EIM_OE__EMI_WEIM_OE            0x80000000
+-				MX53_PAD_EIM_WAIT__EMI_WEIM_WAIT        0x80000000
+-				MX53_PAD_EIM_LBA__EMI_WEIM_LBA          0x80000000
+-				MX53_PAD_EIM_RW__EMI_WEIM_RW            0x80000000
+-				MX53_PAD_EIM_EB0__EMI_WEIM_EB_0         0x80000000
+-				MX53_PAD_EIM_EB1__EMI_WEIM_EB_1         0x80000000
+-				MX53_PAD_EIM_EB2__EMI_WEIM_EB_2         0x80000000
+-				MX53_PAD_EIM_EB3__EMI_WEIM_EB_3         0x80000000
+-				MX53_PAD_EIM_CS0__EMI_WEIM_CS_0         0x80000000
+-				MX53_PAD_EIM_CS1__EMI_WEIM_CS_1         0x80000000
+-				MX53_PAD_EIM_A16__EMI_WEIM_A_16         0x80000000
+-				MX53_PAD_EIM_A17__EMI_WEIM_A_17         0x80000000
+-				MX53_PAD_EIM_A18__EMI_WEIM_A_18         0x80000000
+-				MX53_PAD_EIM_A19__EMI_WEIM_A_19         0x80000000
+-				MX53_PAD_EIM_A20__EMI_WEIM_A_20         0x80000000
+-				MX53_PAD_EIM_A21__EMI_WEIM_A_21         0x80000000
+-				MX53_PAD_EIM_A22__EMI_WEIM_A_22         0x80000000
++				MX53_PAD_GPIO_0__CCM_CLKO         0x1c4
++				MX53_PAD_GPIO_16__I2C3_SDA        0x1c4
++
++				MX53_PAD_EIM_D22__GPIO3_22        0x1c4
++				MX53_PAD_EIM_D23__GPIO3_23        0x1e4
++				MX53_PAD_EIM_D24__GPIO3_24        0x1e4
++
++				MX53_PAD_EIM_OE__EMI_WEIM_OE            0xe4
++				MX53_PAD_EIM_WAIT__EMI_WEIM_WAIT        0x1e0
++				MX53_PAD_EIM_LBA__EMI_WEIM_LBA          0xe4
++				MX53_PAD_EIM_RW__EMI_WEIM_RW            0xe4
++				MX53_PAD_EIM_EB0__EMI_WEIM_EB_0         0xe4
++				MX53_PAD_EIM_EB1__EMI_WEIM_EB_1         0xe4
++				MX53_PAD_EIM_EB2__EMI_WEIM_EB_2         0x1e4
++				MX53_PAD_EIM_EB3__EMI_WEIM_EB_3         0x1e4
++				MX53_PAD_EIM_CS0__EMI_WEIM_CS_0         0xe4
++				MX53_PAD_EIM_CS1__EMI_WEIM_CS_1         0xe4
++				MX53_PAD_EIM_A16__EMI_WEIM_A_16         0xe4
++				MX53_PAD_EIM_A17__EMI_WEIM_A_17         0xe4
++				MX53_PAD_EIM_A18__EMI_WEIM_A_18         0xe4
++				MX53_PAD_EIM_A19__EMI_WEIM_A_19         0xe4
++				MX53_PAD_EIM_A20__EMI_WEIM_A_20         0xe4
++				MX53_PAD_EIM_A21__EMI_WEIM_A_21         0xe4
++				MX53_PAD_EIM_A22__EMI_WEIM_A_22         0xe4
+ 				MX53_PAD_EIM_DA0__EMI_NAND_WEIM_DA_0    0xa4
+ 				MX53_PAD_EIM_DA1__EMI_NAND_WEIM_DA_1    0xa4
+ 				MX53_PAD_EIM_DA2__EMI_NAND_WEIM_DA_2    0xa4
+@@ -93,19 +90,15 @@
+ 				MX53_PAD_NANDF_WP_B__GPIO6_9            0x00000001
+ 				MX53_PAD_NANDF_ALE__GPIO6_8             0x00000001
+ 
+-				MX53_PAD_EIM_D23__GPIO3_23 0x80000000
+-
+-				MX53_PAD_KEY_COL0__AUDMUX_AUD5_TXC	0x80000000
+-				MX53_PAD_KEY_ROW0__AUDMUX_AUD5_TXD	0x80000000
+-				MX53_PAD_KEY_COL1__AUDMUX_AUD5_TXFS	0x80000000
+-				MX53_PAD_KEY_ROW1__AUDMUX_AUD5_RXD	0x80000000
+-
+ 				MX53_PAD_SD1_DATA0__ESDHC1_DAT0		0x1d5
+ 				MX53_PAD_SD1_DATA1__ESDHC1_DAT1		0x1d5
+ 				MX53_PAD_SD1_DATA2__ESDHC1_DAT2		0x1d5
+ 				MX53_PAD_SD1_DATA3__ESDHC1_DAT3		0x1d5
+ 				MX53_PAD_SD1_CMD__ESDHC1_CMD		0x1d5
+ 				MX53_PAD_SD1_CLK__ESDHC1_CLK		0x1d5
++				MX53_PAD_GPIO_1__ESDHC1_CD              0x1c4
++				MX53_PAD_EIM_D17__GPIO3_17              0x1e4
++				MX53_PAD_GPIO_3__GPIO1_3                0x1c4
+ 
+ 				MX53_PAD_SD2_DATA0__ESDHC2_DAT0		0x1d5
+ 				MX53_PAD_SD2_DATA1__ESDHC2_DAT1		0x1d5
+@@ -113,6 +106,9 @@
+ 				MX53_PAD_SD2_DATA3__ESDHC2_DAT3		0x1d5
+ 				MX53_PAD_SD2_CMD__ESDHC2_CMD		0x1d5
+ 				MX53_PAD_SD2_CLK__ESDHC2_CLK		0x1d5
++				MX53_PAD_GPIO_4__ESDHC2_CD              0x1e4
++				MX53_PAD_EIM_D20__GPIO3_20              0x1e4
++				MX53_PAD_GPIO_8__GPIO1_8                0x1c4
+ 
+ 				MX53_PAD_FEC_MDC__FEC_MDC		0x4
+ 				MX53_PAD_FEC_MDIO__FEC_MDIO		0x1fc
+@@ -125,11 +121,8 @@
+ 				MX53_PAD_FEC_TXD1__FEC_TDATA_1		0x4
+ 				MX53_PAD_FEC_TXD0__FEC_TDATA_0		0x4
+ 
+-				MX53_PAD_CSI0_DAT8__I2C1_SDA		0x400001ec
+-				MX53_PAD_CSI0_DAT9__I2C1_SCL		0x400001ec
+-
+-                                MX53_PAD_KEY_ROW3__I2C2_SDA             0xc0000000
+-                                MX53_PAD_KEY_COL3__I2C2_SCL             0xc0000000
++				MX53_PAD_KEY_ROW3__I2C2_SDA             0xc0000000
++				MX53_PAD_KEY_COL3__I2C2_SCL             0xc0000000
+ 
+ 				MX53_PAD_DI0_DISP_CLK__IPU_DI0_DISP_CLK	0x5
+ 				MX53_PAD_DI0_PIN15__IPU_DI0_PIN15	0x5
+-- 
+2.11.0
+

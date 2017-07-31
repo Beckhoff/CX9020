@@ -1,0 +1,56 @@
+From a80fb93f70d52bb275747992de9e435021d691b8 Mon Sep 17 00:00:00 2001
+From: Patrick Bruenn <p.bruenn@beckhoff.com>
+Date: Wed, 21 Jun 2017 11:43:18 +0200
+Subject: [PATCH 1/3] imx: cx9020: use fdt_addr_r and ramdisk_addr_r
+
+Replace fdtaddr and rdaddr variable names with u-boot standard names
+fdt_addr_r and ramdisk_addr_r.
+This will make the use of pxe boot more easy.
+
+Signed-off-by: Patrick Bruenn <p.bruenn@beckhoff.com>
+---
+ include/configs/mx53cx9020.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/include/configs/mx53cx9020.h b/include/configs/mx53cx9020.h
+index 151c4b3faf..b056298d9a 100644
+--- a/include/configs/mx53cx9020.h
++++ b/include/configs/mx53cx9020.h
+@@ -66,8 +66,8 @@
+ #define CONFIG_SYS_TEXT_BASE    0x77800000
+ 
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+-	"fdt_addr=0x71ff0000\0" \
+-	"rdaddr=0x72000000\0" \
++	"fdt_addr_r=0x71ff0000\0" \
++	"ramdisk_addr_r=0x72000000\0" \
+ 	"console=ttymxc1,115200\0" \
+ 	"uenv=/boot/uEnv.txt\0" \
+ 	"optargs=\0" \
+@@ -81,10 +81,10 @@
+ 		"rootfstype=${mmcrootfstype} " \
+ 		"${cmdline}\0" \
+ 	"loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
+-	"loadrd=load mmc ${bootpart} ${rdaddr} ${bootdir}/${rdfile};" \
++	"loadrd=load mmc ${bootpart} ${ramdisk_addr_r} ${bootdir}/${rdfile};" \
+ 		"setenv rdsize ${filesize}\0" \
+ 	"loadfdt=echo loading ${fdt_path} ...;" \
+-		"load mmc ${bootpart} ${fdt_addr} ${fdt_path}\0" \
++		"load mmc ${bootpart} ${fdt_addr_r} ${fdt_path}\0" \
+ 	"mmcboot=mmc dev ${mmcdev}; " \
+ 		"if mmc rescan; then " \
+ 			"echo SD/MMC found on device ${mmcdev};" \
+@@ -128,8 +128,8 @@
+ 			"fi;" \
+ 			"run mmcargs;" \
+ 			"echo debug: [${bootargs}] ... ;" \
+-			"echo debug: [bootz ${loadaddr} - ${fdt_addr}] ... ;" \
+-			"bootz ${loadaddr} - ${fdt_addr}; " \
++			"echo debug: [bootz ${loadaddr} - ${fdt_addr_r}];" \
++			"bootz ${loadaddr} - ${fdt_addr_r}; " \
+ 		"fi;\0"
+ 
+ #define CONFIG_BOOTCOMMAND \
+-- 
+2.11.0
+
