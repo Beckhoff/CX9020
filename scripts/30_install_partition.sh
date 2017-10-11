@@ -9,7 +9,6 @@ if [ $# -ne 2 ] || ! [ -b $1 ]; then
 fi
 
 PARTITION=$1
-DEB_RELEASE=jessie
 ROOTFS_MOUNT=$2
 SCRIPT_PATH="`dirname \"$0\"`"
 
