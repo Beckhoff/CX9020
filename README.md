@@ -33,7 +33,7 @@ make uboot
 
 #get and patch a rt kernel:
 #==========================
-./tools/prepare_kernel.sh v4.9.35-rt25
+./tools/prepare_kernel.sh v4.9.67-rt59
 
 #configure and build the kernel:
 #===============================

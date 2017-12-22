@@ -1,4 +1,4 @@
-From 6eb9b293c30e2ce0b849681754d38e9dd54d8cf8 Mon Sep 17 00:00:00 2001
+From 22159ef97fb2dffa0a94c721ae819e1984b7950d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Patrick=20Br=C3=BCnn?= <p.bruenn@beckhoff.com>
 Date: Wed, 2 Dec 2015 11:02:28 +0100
 Subject: [PATCH 2/3] ARM: dts: imx: add CX9020 Embedded PC device tree
