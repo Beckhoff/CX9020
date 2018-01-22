@@ -1,7 +1,12 @@
 stages:
   - build
+  - add-ssh
+  - test
 
 build:
+  tags: 
+    - kvm
+    - ubuntu
   stage: build
   variables:
     DEBIAN_FRONTEND: 'noninteractive'
@@ -30,3 +35,44 @@ build:
   artifacts:
     paths:
       - sdcard.img
+
+add-ssh:
+  tags: 
+    - kvm
+    - ubuntu
+  stage: add-ssh
+  script:
+    - mkdir mounted_root
+    - export SD_LOOPDEVICE=$(sudo losetup --show -Pf sdcard.img)
+    - ls -al /dev
+    - sudo mount ${SD_LOOPDEVICE}p1 mounted_root
+    - sudo mkdir mounted_root/root/.ssh
+    - echo ${SSH_PUBLIC_KEY} | sudo tee mounted_root/root/.ssh/authorized_keys
+    - sudo chmod 600 mounted_root/root/.ssh/authorized_keys
+    - sync && sudo umount mounted_root
+  artifacts:
+    paths:
+      - sdcard.img
+  dependencies:
+      - build
+
+test:
+  image: ubuntu
+  tags: 
+    - docker
+  stage: test
+  script:
+    - apt-get update > /dev/null && apt-get install -y openssh-client wget unzip > /dev/null
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - scp -P ${SSH_PORT} sdcard.img ${SSH_USER}@${SSH_HOST}:/tmp/sdcard-${DEVICE}-${CI_BUILD_ID}.img
+    - scp -P ${SSH_PORT} tests/${SCRIPTNAME}.sh ${SSH_USER}@${SSH_HOST}:/tmp/${SCRIPTNAME}-${DEVICE}-${CI_BUILD_ID}.sh
+    - ssh -p ${SSH_PORT} -t -t ${SSH_USER}@${SSH_HOST} "./61_run_test_sd.sh ${DEVICE_ID}-${DEVICE} /tmp/sdcard-${DEVICE}-${CI_BUILD_ID}.img /tmp/${SCRIPTNAME}-${DEVICE}-${CI_BUILD_ID}.sh ./${SCRIPTNAME}-${DEVICE}-${CI_BUILD_ID}.sh"
+  variables:
+    DEVICE: 'CX9020'
+    DEVICE_ID: 'CX09'
+    SCRIPTNAME: 'test_boot'
+  dependencies:
+      - add-ssh
