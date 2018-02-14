@@ -47,7 +47,7 @@ add-ssh:
     - ls -al /dev
     - sudo mount ${SD_LOOPDEVICE}p1 mounted_root
     - sudo mkdir mounted_root/root/.ssh
-    - echo ${SSH_PUBLIC_KEY} | sudo tee mounted_root/root/.ssh/authorized_keys
+    - echo ${SSH_AUTHORIZED_KEYS} | sudo tee mounted_root/root/.ssh/authorized_keys
     - sudo chmod 600 mounted_root/root/.ssh/authorized_keys
     - sync && sudo umount mounted_root
   artifacts:
