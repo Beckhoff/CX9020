@@ -6,7 +6,7 @@ set -e
 
 if [ "$#" -ne 1 ]; then
 
-        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample:\n $0 v4.9.67-rt59"
+        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample:\n $0 v4.9.76-rt61"
         exit 64
 fi
 
