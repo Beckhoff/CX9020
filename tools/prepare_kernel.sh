@@ -12,7 +12,7 @@ fi
 
 RT_VERSION=${1}
 REPO=kernel
-GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 #GIT_REMOTE=git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
 
 ccat_remote="${ccat_remote:-https://github.com/Beckhoff/CCAT}"
