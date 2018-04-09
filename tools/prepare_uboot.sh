@@ -3,7 +3,7 @@
 set -e
 
 if [ $# -ne 1 ]; then
-	echo -e "Usage:\n $0 <u-boot version>\n\nexample:\n $0 v2017.07"
+	echo -e "Usage:\n $0 <u-boot version>\n\nexample:\n $0 v2018.03"
 	exit 64
 fi
 
