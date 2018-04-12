@@ -1,0 +1,94 @@
+From bfa5f327936185c78f5edbc8838f26e85ab2d1cd Mon Sep 17 00:00:00 2001
+From: Patrick Bruenn <p.bruenn@beckhoff.com>
+Date: Thu, 20 Jul 2017 11:49:04 +0200
+Subject: [PATCH 2/3] cx9020: add ccat node and pinmux configuration
+
+Signed-off-by: Patrick Bruenn <p.bruenn@beckhoff.com>
+---
+ arch/arm/boot/dts/imx53-cx9020.dts | 63 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx53-cx9020.dts b/arch/arm/boot/dts/imx53-cx9020.dts
+index 4f54fd4418a3..a6111bb8df5d 100644
+--- a/arch/arm/boot/dts/imx53-cx9020.dts
++++ b/arch/arm/boot/dts/imx53-cx9020.dts
+@@ -26,6 +26,12 @@
+ 		      <0xb0000000 0x20000000>;
+ 	};
+ 
++	ccat {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ccat>;
++		compatible = "bhf,emi-ccat";
++	};
++
+ 	display-0 {
+ 		#address-cells =<1>;
+ 		#size-cells = <0>;
+@@ -202,6 +208,63 @@
+ 		>;
+ 	};
+ 
++	pinctrl_ccat: ccatgrp {
++		fsl,pins = <
++			MX53_PAD_EIM_OE__EMI_WEIM_OE            0xe4
++			MX53_PAD_EIM_WAIT__EMI_WEIM_WAIT        0x1e0
++			MX53_PAD_EIM_LBA__EMI_WEIM_LBA          0xe4
++			MX53_PAD_EIM_RW__EMI_WEIM_RW            0xe4
++			MX53_PAD_EIM_EB0__EMI_WEIM_EB_0         0xe4
++			MX53_PAD_EIM_EB1__EMI_WEIM_EB_1         0xe4
++			MX53_PAD_EIM_EB2__EMI_WEIM_EB_2         0x1e4
++			MX53_PAD_EIM_EB3__EMI_WEIM_EB_3         0x1e4
++			MX53_PAD_EIM_CS0__EMI_WEIM_CS_0         0xe4
++			MX53_PAD_EIM_CS1__EMI_WEIM_CS_1         0xe4
++			MX53_PAD_EIM_A16__EMI_WEIM_A_16         0xe4
++			MX53_PAD_EIM_A17__EMI_WEIM_A_17         0xe4
++			MX53_PAD_EIM_A18__EMI_WEIM_A_18         0xe4
++			MX53_PAD_EIM_A19__EMI_WEIM_A_19         0xe4
++			MX53_PAD_EIM_A20__EMI_WEIM_A_20         0xe4
++			MX53_PAD_EIM_A21__EMI_WEIM_A_21         0xe4
++			MX53_PAD_EIM_A22__EMI_WEIM_A_22         0xe4
++			MX53_PAD_EIM_DA0__EMI_NAND_WEIM_DA_0    0xa4
++			MX53_PAD_EIM_DA1__EMI_NAND_WEIM_DA_1    0xa4
++			MX53_PAD_EIM_DA2__EMI_NAND_WEIM_DA_2    0xa4
++			MX53_PAD_EIM_DA3__EMI_NAND_WEIM_DA_3    0xa4
++			MX53_PAD_EIM_DA4__EMI_NAND_WEIM_DA_4    0xa4
++			MX53_PAD_EIM_DA5__EMI_NAND_WEIM_DA_5    0xa4
++			MX53_PAD_EIM_DA6__EMI_NAND_WEIM_DA_6    0xa4
++			MX53_PAD_EIM_DA7__EMI_NAND_WEIM_DA_7    0xa4
++			MX53_PAD_EIM_DA8__EMI_NAND_WEIM_DA_8    0xa4
++			MX53_PAD_EIM_DA9__EMI_NAND_WEIM_DA_9    0xa4
++			MX53_PAD_EIM_DA10__EMI_NAND_WEIM_DA_10	0xa4
++			MX53_PAD_EIM_DA11__EMI_NAND_WEIM_DA_11  0xa4
++			MX53_PAD_EIM_DA12__EMI_NAND_WEIM_DA_12  0xa4
++			MX53_PAD_EIM_DA13__EMI_NAND_WEIM_DA_13  0xa4
++			MX53_PAD_EIM_DA14__EMI_NAND_WEIM_DA_14  0xa4
++			MX53_PAD_EIM_DA15__EMI_NAND_WEIM_DA_15  0xa4
++			MX53_PAD_PATA_DATA0__EMI_NANDF_D_0      0xa4
++			MX53_PAD_PATA_DATA1__EMI_NANDF_D_1      0xa4
++			MX53_PAD_PATA_DATA2__EMI_NANDF_D_2      0xa4
++			MX53_PAD_PATA_DATA3__EMI_NANDF_D_3      0xa4
++			MX53_PAD_PATA_DATA4__EMI_NANDF_D_4      0xa4
++			MX53_PAD_PATA_DATA5__EMI_NANDF_D_5      0xa4
++			MX53_PAD_PATA_DATA6__EMI_NANDF_D_6      0xa4
++			MX53_PAD_PATA_DATA7__EMI_NANDF_D_7      0xa4
++			MX53_PAD_PATA_DATA8__EMI_NANDF_D_8      0xa4
++			MX53_PAD_PATA_DATA9__EMI_NANDF_D_9      0xa4
++			MX53_PAD_PATA_DATA10__EMI_NANDF_D_10    0xa4
++			MX53_PAD_PATA_DATA11__EMI_NANDF_D_11    0xa4
++			MX53_PAD_PATA_DATA12__EMI_NANDF_D_12    0xa4
++			MX53_PAD_PATA_DATA13__EMI_NANDF_D_13    0xa4
++			MX53_PAD_PATA_DATA14__EMI_NANDF_D_14    0xa4
++			MX53_PAD_PATA_DATA15__EMI_NANDF_D_15    0xa4
++			MX53_PAD_NANDF_CLE__GPIO6_7             0x00000001
++			MX53_PAD_NANDF_WP_B__GPIO6_9            0x00000001
++			MX53_PAD_NANDF_ALE__GPIO6_8             0x00000001
++		>;
++	};
++
+ 	pinctrl_esdhc1: esdhc1grp {
+ 		fsl,pins = <
+ 			MX53_PAD_SD1_DATA0__ESDHC1_DAT0		0x1d5
+-- 
+2.11.0
+

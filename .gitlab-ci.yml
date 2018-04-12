@@ -13,7 +13,7 @@ build:
     # set git user in clones to apply patches
     GIT_CLONE_ARGS: '--config user.name="nobody" --config user.email="nobody@example.com"'
     # use cache to clone linux
-    KERNEL_CLONE_ARGS: '--reference /home/gitcaches/linux-stable-rt.reference'
+    KERNEL_CLONE_ARGS: '--reference /home/gitcaches/linux-rt-devel.reference'
     # use cache to clone u-boot
     UBOOT_CLONE_ARGS: '--reference /home/gitcaches/u-boot.reference'
   script:
@@ -28,7 +28,7 @@ build:
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
     - tools/prepare_uboot.sh v2018.03
     - make uboot
-    - tools/prepare_kernel.sh v4.9.76-rt61
+    - tools/prepare_kernel.sh v4.14.29-rt24
     - make kernel
     - tools/prepare_etherlab.sh
     - make etherlab
