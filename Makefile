@@ -21,6 +21,7 @@ uboot:
 	cd ${UBOOT} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} mx53cx9020_defconfig
 	cd ${UBOOT} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS}
 
+kernel: CROSS_PREFIX=arm-linux-gnueabihf-
 kernel:
 	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} oldconfig
 #	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} menuconfig

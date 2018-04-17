@@ -6,14 +6,15 @@ set -e
 
 if [ "$#" -ne 1 ]; then
 
-        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample:\n $0 v4.14.29-rt24"
+        echo -e "Usage:\n $0 <KERNEL_VERSION>\n\nexample:\n $0 v4.17-rc1"
         exit 64
 fi
 
 RT_VERSION=${1}
 REPO=kernel
 #GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+#GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 
 ccat_remote="${ccat_remote:-https://github.com/Beckhoff/CCAT}"
 ccat_branch="${ccat_branch:-master}"

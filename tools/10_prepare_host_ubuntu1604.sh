@@ -9,7 +9,9 @@ sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y \
 	autoconf \
 	bc \
 	binfmt-support \
+	bison \
 	device-tree-compiler \
+	flex \
 	gcc-arm-embedded \
 	gcc-5-arm-linux-gnueabihf \
 	g++-5-arm-linux-gnueabihf \
