@@ -17,11 +17,20 @@ sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y \
 	lib32ncurses5-dev \
 	lib32stdc++6 \
 	lib32z1 \
+	libsdl1.2-dev \
+	libssl-dev \
 	libtool \
 	make \
 	mercurial \
 	multistrap \
+	python-pip \
+	python-pytest \
 	qemu \
 	qemu-user-static \
+	swig \
 	wget \
 	xz-utils
+
+sudo pip install \
+	coverage \
+	pyfdt

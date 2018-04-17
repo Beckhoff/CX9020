@@ -20,7 +20,10 @@ build:
     - tools/10_prepare_host_ubuntu1604.sh
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
+    - git config --global user.name "gitlab-runner"
+    - git config --global user.email "gitlab-runner@example.com"
     - tools/prepare_uboot.sh v2018.03
+    - make uboot-tests
     - make uboot
     - tools/prepare_kernel.sh v4.14.29-rt24
     - make kernel
