@@ -9,7 +9,6 @@ build:
     - ubuntu
   stage: build
   variables:
-    DEBIAN_FRONTEND: 'noninteractive'
     # set git user in clones to apply patches
     GIT_CLONE_ARGS: '--config user.name="nobody" --config user.email="nobody@example.com"'
     # use cache to clone linux
@@ -18,12 +17,7 @@ build:
     UBOOT_CLONE_ARGS: '--reference /home/gitcaches/u-boot.reference'
   script:
     # run readme steps
-    - sudo dpkg --add-architecture i386
-    - printf "\ndeb http://ppa.launchpad.net/team-gcc-arm-embedded/ppa/ubuntu xenial main\n" | sudo tee -a /etc/apt/sources.list
-    - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key B4D03348F75E3362B1E1C2A1D1FAA6ECF64D33B0
-    - sudo apt-get update
-    # skip questions during package update
-    - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y autoconf bc binfmt-support device-tree-compiler gcc-arm-embedded gcc-5-arm-linux-gnueabihf g++-5-arm-linux-gnueabihf git lib32ncurses5-dev lib32stdc++6 lib32z1 libtool make mercurial multistrap qemu qemu-user-static wget xz-utils
+    - tools/10_prepare_host_ubuntu1604.sh
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
     - tools/prepare_uboot.sh v2018.03

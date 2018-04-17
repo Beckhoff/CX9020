@@ -7,13 +7,8 @@ Please make sure to follow the steps below to create your microSD card.
 ## Installation
 ```
 #prepare your machine f.e.: 64-bit Ubuntu 16.04 LTS would require:
-#===================================================================
-sudo dpkg --add-architecture i386
-printf "\ndeb http://ppa.launchpad.net/team-gcc-arm-embedded/ppa/ubuntu xenial main\n" | sudo tee -a /etc/apt/sources.list
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key B4D03348F75E3362B1E1C2A1D1FAA6ECF64D33B0
-sudo apt-get update
-sudo apt-get install -y autoconf bc binfmt-support bison device-tree-compiler flex g++-5-arm-linux-gnueabihf gcc-5-arm-linux-gnueabihf git lib32ncurses5-dev lib32stdc++6 lib32z1 libtool make mercurial multistrap qemu qemu-user-static wget xz-utils 
-
+#=================================================================
+./tools/10_prepare_host_ubuntu1604.sh
 
 # get the repository:
 #====================
