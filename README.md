@@ -22,7 +22,7 @@ sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
 
 #get and patch the u-boot sources:
 #=================================
-./tools/prepare_uboot.sh v2018.05-rc2
+./tools/prepare_uboot.sh v2018.05
 
 #build u-boot:
 #=============
