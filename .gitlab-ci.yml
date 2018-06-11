@@ -22,7 +22,7 @@ build:
     - sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
     - git config --global user.name "gitlab-runner"
     - git config --global user.email "gitlab-runner@example.com"
-    - tools/prepare_uboot.sh v2018.05
+    - tools/prepare_uboot.sh v2018.07-rc1
     - make uboot-tests
     - make uboot
     - tools/prepare_kernel.sh v4.17-rc1
