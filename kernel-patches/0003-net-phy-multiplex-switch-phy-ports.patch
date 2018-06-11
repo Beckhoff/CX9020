@@ -1,7 +1,7 @@
-From 55dd18f5ed7f7580456ee505fc69b430eee69545 Mon Sep 17 00:00:00 2001
+From 8ed77eb5e22ed9f7c424b7c87c0136170866ade5 Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Fri, 18 Dec 2015 10:46:10 +0100
-Subject: [PATCH 2/2] net: phy: multiplex switch phy ports
+Subject: [PATCH 3/3] net: phy: multiplex switch phy ports
 
 Devices such as CX9020 Embedded PC with only one ethernet controller
 integrate internal switches to provide more than one RJ45 port.
@@ -13,7 +13,7 @@ the multiplexing behaviour if set to > 1.
  1 file changed, 46 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index b13eed21c87d..f3eb8b880104 100644
+index 9e4ba8e80a18..850f24e2a1f5 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
 @@ -42,6 +42,10 @@ MODULE_DESCRIPTION("PHY library");
@@ -27,7 +27,7 @@ index b13eed21c87d..f3eb8b880104 100644
  void phy_device_free(struct phy_device *phydev)
  {
  	put_device(&phydev->mdio.dev);
-@@ -1593,6 +1597,32 @@ int genphy_read_status(struct phy_device *phydev)
+@@ -1617,6 +1621,32 @@ int genphy_read_status(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_read_status);
  
@@ -60,7 +60,7 @@ index b13eed21c87d..f3eb8b880104 100644
  /**
   * genphy_soft_reset - software reset the PHY via BMCR_RESET bit
   * @phydev: target phy_device struct
-@@ -1614,6 +1644,20 @@ int genphy_soft_reset(struct phy_device *phydev)
+@@ -1638,6 +1668,20 @@ int genphy_soft_reset(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_soft_reset);
  
@@ -81,7 +81,7 @@ index b13eed21c87d..f3eb8b880104 100644
  int genphy_config_init(struct phy_device *phydev)
  {
  	int val;
-@@ -1924,12 +1968,13 @@ static struct phy_driver genphy_driver = {
+@@ -1965,12 +2009,13 @@ static struct phy_driver genphy_driver = {
  	.phy_id		= 0xffffffff,
  	.phy_id_mask	= 0xffffffff,
  	.name		= "Generic PHY",
