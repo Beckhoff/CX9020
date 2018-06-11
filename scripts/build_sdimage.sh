@@ -28,7 +28,7 @@ rm -rf ${TMP_MOUNT}
 mkdir -p ${TMP_MOUNT}
 ${SCRIPT_PATH}/40_install_rootfs.sh ${TMP_MOUNT}
 ${SCRIPT_PATH}/50_install_kernel.sh ${TMP_MOUNT}
-${SCRIPT_PATH}/52_install_etherlab.sh ${TMP_MOUNT}
+#${SCRIPT_PATH}/52_install_etherlab.sh ${TMP_MOUNT}
 ${SCRIPT_PATH}/60_install_configuration.sh ${TMP_MOUNT}
 
 dd if=/dev/zero of=${RAMDISK_IMAGE} bs=1M count=238
