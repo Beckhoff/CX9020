@@ -19,6 +19,7 @@ sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y \
 	lib32ncurses5-dev \
 	lib32stdc++6 \
 	lib32z1 \
+	liblz4-tool \
 	libsdl1.2-dev \
 	libssl-dev \
 	libtool \
