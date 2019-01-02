@@ -25,6 +25,7 @@ sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y \
 	make \
 	mercurial \
 	multistrap \
+	python-coverage \
 	python-pip \
 	python-pytest \
 	qemu \
