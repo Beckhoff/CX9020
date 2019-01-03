@@ -1,7 +1,7 @@
-From 8ed77eb5e22ed9f7c424b7c87c0136170866ade5 Mon Sep 17 00:00:00 2001
+From 3f9d397feab33f7c1e9e399b0608fb2253c32645 Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Fri, 18 Dec 2015 10:46:10 +0100
-Subject: [PATCH 3/3] net: phy: multiplex switch phy ports
+Subject: [PATCH 2/2] net: phy: multiplex switch phy ports
 
 Devices such as CX9020 Embedded PC with only one ethernet controller
 integrate internal switches to provide more than one RJ45 port.
@@ -9,25 +9,24 @@ Modify the generic phy driver to report 'link up' if any of the external
 ports senses a link. Add 'phy_driver.num_phys' module option to enable
 the multiplexing behaviour if set to > 1.
 ---
- drivers/net/phy/phy_device.c | 47 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+ drivers/net/phy/phy_device.c | 46 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 9e4ba8e80a18..850f24e2a1f5 100644
+index 26c41ede54a4..432539881608 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -42,6 +42,10 @@ MODULE_DESCRIPTION("PHY library");
- MODULE_AUTHOR("Andy Fleming");
- MODULE_LICENSE("GPL");
- 
+@@ -185,6 +185,9 @@ static void features_init(void)
+ 			       ARRAY_SIZE(phy_10gbit_full_features_array),
+ 			       phy_10gbit_full_features);
+ }
 +static const int first_phy_addr = 1;
 +static int num_phys = 1;
 +module_param(num_phys, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
-+
+ 
  void phy_device_free(struct phy_device *phydev)
  {
- 	put_device(&phydev->mdio.dev);
-@@ -1617,6 +1621,32 @@ int genphy_read_status(struct phy_device *phydev)
+@@ -1774,6 +1777,32 @@ int genphy_read_status(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_read_status);
  
@@ -60,7 +59,7 @@ index 9e4ba8e80a18..850f24e2a1f5 100644
  /**
   * genphy_soft_reset - software reset the PHY via BMCR_RESET bit
   * @phydev: target phy_device struct
-@@ -1638,6 +1668,20 @@ int genphy_soft_reset(struct phy_device *phydev)
+@@ -1795,6 +1824,20 @@ int genphy_soft_reset(struct phy_device *phydev)
  }
  EXPORT_SYMBOL(genphy_soft_reset);
  
@@ -81,16 +80,14 @@ index 9e4ba8e80a18..850f24e2a1f5 100644
  int genphy_config_init(struct phy_device *phydev)
  {
  	int val;
-@@ -1965,12 +2009,13 @@ static struct phy_driver genphy_driver = {
+@@ -2249,10 +2292,11 @@ static struct phy_driver genphy_driver = {
  	.phy_id		= 0xffffffff,
  	.phy_id_mask	= 0xffffffff,
  	.name		= "Generic PHY",
 -	.soft_reset	= genphy_no_soft_reset,
 +	.soft_reset	= genphy_soft_reset_multiplexed,
  	.config_init	= genphy_config_init,
- 	.features	= PHY_GBIT_FEATURES | SUPPORTED_MII |
- 			  SUPPORTED_AUI | SUPPORTED_FIBRE |
- 			  SUPPORTED_BNC,
+ 	.features	= PHY_GBIT_ALL_PORTS_FEATURES,
  	.aneg_done	= genphy_aneg_done,
 +	.read_status	= genphy_read_status_multiplexed,
  	.suspend	= genphy_suspend,
