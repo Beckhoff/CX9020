@@ -56,22 +56,28 @@ add-ssh:
       - build
 
 test:
-  image: ubuntu
+  image: ${REGISTRY_HOST}/beckhoff/test_runner:1.2
   tags: 
     - docker
   stage: test
   script:
-    - apt-get update > /dev/null && apt-get install -y openssh-client wget unzip > /dev/null
+    - trap 'export real_exit_code=$?; echo "Stopped by trap"; 41_reset_sd.sh ${DEVICE_ID}-${DEVICE};50_power.sh ${DEVICE_ID}-${DEVICE} 0 || true; 99_cleanup.sh || true;  sleep 5 && exit $real_exit_code' SIGINT SIGTERM EXIT
+    - source 09_init.sh
+    - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - scp -P ${SSH_PORT} sdcard.img ${SSH_USER}@${SSH_HOST}:/tmp/sdcard-${DEVICE}-${CI_BUILD_ID}.img
-    - scp -P ${SSH_PORT} tests/${SCRIPTNAME}.sh ${SSH_USER}@${SSH_HOST}:/tmp/${SCRIPTNAME}-${DEVICE}-${CI_BUILD_ID}.sh
-    - ssh -p ${SSH_PORT} -t -t ${SSH_USER}@${SSH_HOST} "./61_run_test_sd.sh ${DEVICE_ID}-${DEVICE} /tmp/sdcard-${DEVICE}-${CI_BUILD_ID}.img /tmp/${SCRIPTNAME}-${DEVICE}-${CI_BUILD_ID}.sh ./${SCRIPTNAME}-${DEVICE}-${CI_BUILD_ID}.sh"
+    - 40_flash_sd.sh sdcard.img
+    - 50_power.sh ${DEVICE_ID}-${DEVICE} 1
+    - 51_wait.sh ${DEVICE_ID}-${DEVICE} root
+    - scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r ./tests/ root@${TEST_DEVICE_IP}:~/
+    - ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${TEST_DEVICE_IP} tests/${SCRIPTNAME}.sh
   variables:
     DEVICE: 'CX9020'
     DEVICE_ID: 'CX09'
     SCRIPTNAME: 'test_boot'
   dependencies:
       - add-ssh
+  tags:
+    - CX09-CX9020
