@@ -27,8 +27,8 @@ build:
     - make uboot
     - tools/prepare_kernel.sh v4.20
     - make kernel
-#    - tools/prepare_etherlab.sh
-#    - make etherlab
+    - tools/prepare_etherlab.sh
+    - make etherlab
     # create image instead of writing to device
     - sudo scripts/build_sdimage.sh
   artifacts:
