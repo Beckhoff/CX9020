@@ -27,6 +27,9 @@ trap cleanup INT TERM EXIT
 rm -rf ${TMP_MOUNT}
 mkdir -p ${TMP_MOUNT}
 ${SCRIPT_PATH}/40_install_rootfs.sh ${TMP_MOUNT}
+if test -r "${SCRIPT_PATH}/../os-release"; then
+	cat "${SCRIPT_PATH}/../os-release" >> "${TMP_MOUNT}/etc/os-release"
+fi
 
 dd if=/dev/zero of=${RAMDISK_IMAGE} bs=1M count=${image_size_mb}
 mkfs.ext2 -F -E offset=1048576,root_owner=${ROOTFS_OWNER} ${RAMDISK_IMAGE}

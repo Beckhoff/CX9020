@@ -30,6 +30,7 @@ build:
     - tools/prepare_etherlab.sh
     - make etherlab
     # create image instead of writing to device
+    - printf "CI_PIPELINE_ID=\"${CI_PIPELINE_ID}\"\n" > os-release
     - sudo scripts/build_sdimage.sh
   artifacts:
     expire_in: 2 weeks
