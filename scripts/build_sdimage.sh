@@ -20,17 +20,15 @@ MBR=tools/mbr.bin
 PARTITION_CONFIG=tools/partitions.sfdisk
 SCRIPT_PATH="`dirname \"$0\"`"
 SFDISK_OPTIONS="--force"
+image_size_mb=238
 
 trap cleanup INT TERM EXIT
 
 rm -rf ${TMP_MOUNT}
 mkdir -p ${TMP_MOUNT}
 ${SCRIPT_PATH}/40_install_rootfs.sh ${TMP_MOUNT}
-${SCRIPT_PATH}/50_install_kernel.sh ${TMP_MOUNT}
-#${SCRIPT_PATH}/52_install_etherlab.sh ${TMP_MOUNT}
-${SCRIPT_PATH}/60_install_configuration.sh ${TMP_MOUNT}
 
-dd if=/dev/zero of=${RAMDISK_IMAGE} bs=1M count=238
+dd if=/dev/zero of=${RAMDISK_IMAGE} bs=1M count=${image_size_mb}
 mkfs.ext2 -F -E offset=1048576,root_owner=${ROOTFS_OWNER} ${RAMDISK_IMAGE}
 dd if=${MBR} of=${RAMDISK_IMAGE} conv=notrunc
 "${SCRIPT_PATH}/20_install_uboot.sh" "${RAMDISK_IMAGE}"

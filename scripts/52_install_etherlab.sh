@@ -15,6 +15,7 @@ KERNEL=kernel
 
 CROSS_PREFIX=arm-linux-gnueabihf-
 
+if test -d "${ETHERLAB}"; then
 pushd ${ETHERLAB}
 make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} INSTALL_MOD_PATH=${ROOTFS_MOUNT} modules_install
 # This workaround is required to cross compile ethercat userspace tool for CX9020(armhf)
@@ -28,3 +29,4 @@ cp -a ${ROOTFS_MOUNT}/opt/etherlab/etc/sysconfig/ethercat ${ROOTFS_MOUNT}/etc/sy
 sed -b -i 's/MASTER0_DEVICE=\"\"/MASTER0_DEVICE=\"ff:ff:ff:ff:ff:ff\"/' ${ROOTFS_MOUNT}/etc/sysconfig/ethercat
 sed -b -i 's/DEVICE_MODULES=\"\"/DEVICE_MODULES=\"ccat_netdev\"/' ${ROOTFS_MOUNT}/etc/sysconfig/ethercat
 ln -fs /opt/etherlab/etc/init.d/ethercat ${ROOTFS_MOUNT}/etc/init.d/
+fi

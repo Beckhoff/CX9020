@@ -49,10 +49,6 @@ make etherlab
 #BE CAREFUL to specify the correct device name,
 #or you might end up deleting your host's root partition!
 ./scripts/install.sh /dev/sdc /tmp/rootfs
-
-#install etherlab (optional):
-#=============================
-./scripts/52_install_etherlab.sh /tmp/rootfs
 ```
 ## Usage
 The standard login on first boot:

@@ -27,6 +27,10 @@ chmod u+x ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 /bin/mknod -m 0444 ${ROOTFS_MOUNT}/dev/urandom c 1 9
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh"
 
+${SCRIPT_PATH}/50_install_kernel.sh ${ROOTFS_MOUNT}
+${SCRIPT_PATH}/52_install_etherlab.sh ${ROOTFS_MOUNT}
+${SCRIPT_PATH}/60_install_configuration.sh ${ROOTFS_MOUNT}
+
 # remove chroot helpers
 rm ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 rm ${ROOTFS_MOUNT}/etc/resolv.conf
