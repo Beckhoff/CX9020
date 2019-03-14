@@ -31,4 +31,5 @@ sed -b -i 's/DEVICE_MODULES=\"\"/DEVICE_MODULES=\"ccat_netdev\"/' ${ROOTFS_MOUNT
 ln -fs /usr/local/etc/init.d/ethercat ${ROOTFS_MOUNT}/etc/init.d/
 printf "ccat\n" > ${ROOTFS_MOUNT}/etc/modules-load.d/ccat.conf
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "systemctl enable ethercat"
+cp -a tests/etherlab/example.bin ${ROOTFS_MOUNT}/root/
 fi
