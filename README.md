@@ -6,19 +6,14 @@ Please make sure to follow the steps below to create your microSD card.
 
 ## Installation
 ```
-#prepare your machine f.e.: 64-bit Ubuntu 16.04 LTS would require:
+#prepare your machine f.e.: 64-bit Ubuntu 18.04 LTS would require:
 #=================================================================
-./tools/10_prepare_host_ubuntu1604.sh
+./tools/10_prepare_host_ubuntu1804.sh
 
 # get the repository:
 #====================
 git clone https://github.com/Beckhoff/CX9020.git
 cd CX9020/
-
-# link gcc-5-arm as default arm compiler
-#=======================================
-sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
-sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
 
 #get and patch the u-boot sources:
 #=================================
