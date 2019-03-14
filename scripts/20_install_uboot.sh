@@ -3,7 +3,7 @@
 set -e
 set -o nounset
 
-if [ $# -ne 1 ] || ! [ -b $1 ]; then
+if [ $# -ne 1 ] || ! [ -e $1 ]; then
 	echo -e "Usage:\n $0 <disk>\n\nexample:\n $0 /dev/sdc\n\n"
 	exit -1
 fi
