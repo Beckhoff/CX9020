@@ -1,46 +1,40 @@
 stages:
+  - build-docker-image
   - build
   - add-ssh
   - test
 
-build:
-  tags: 
-    - kvm
-    - ubuntu
-  stage: build
-  variables:
-    # set git user in clones to apply patches
-    GIT_CLONE_ARGS: '--config user.name="nobody" --config user.email="nobody@example.com"'
-    # use cache to clone linux
-    KERNEL_CLONE_ARGS: '--reference /home/gitcaches/linux.reference'
-    # use cache to clone u-boot
-    UBOOT_CLONE_ARGS: '--reference /home/gitcaches/u-boot.reference'
+
+build-docker-image:
+  image: docker:latest
+  stage: build-docker-image
+  tags:
+    - docker
+    - privileged
   script:
-    # run readme steps
-    - tools/10_prepare_host_ubuntu1604.sh
-    - sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
-    - sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
-    - git config --global user.name "gitlab-runner"
-    - git config --global user.email "gitlab-runner@example.com"
-    - tools/prepare_uboot.sh v2018.11
-    - make uboot-tests
-    - make uboot
-    - tools/prepare_kernel.sh v4.20
-    - make kernel
-    - tools/prepare_etherlab.sh
-    - make etherlab
-    # create image instead of writing to device
-    - printf "CI_PIPELINE_ID=\"${CI_PIPELINE_ID}\"\n" > os-release
-    - sudo scripts/build_sdimage.sh
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN ${REGISTRY_HOST}
+    - docker build -t cx9020_builder .
+    - docker tag cx9020_builder ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
+    - docker push ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
+
+build:
+  image: ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
+  tags: 
+    - docker
+    - privileged
+  stage: build
+  script:
+    - scripts/run_build.sh
   artifacts:
     expire_in: 2 weeks
     paths:
       - sdcard.img
 
 add-ssh:
+  image: ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
   tags: 
-    - kvm
-    - ubuntu
+    - docker
+    - privileged
   stage: add-ssh
   script:
     - mkdir mounted_root
@@ -60,8 +54,6 @@ add-ssh:
 
 test:
   image: ${REGISTRY_HOST}/beckhoff/test_runner:1.2
-  tags: 
-    - docker
   stage: test
   script:
     - trap 'export real_exit_code=$?; echo "Stopped by trap"; 41_reset_sd.sh ${DEVICE_ID}-${DEVICE};50_power.sh ${DEVICE_ID}-${DEVICE} 0 || true; 99_cleanup.sh || true;  sleep 5 && exit $real_exit_code' SIGINT SIGTERM EXIT
