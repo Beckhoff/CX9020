@@ -41,7 +41,7 @@ add-ssh:
     - export SD_LOOPDEVICE=$(sudo losetup --show -Pf sdcard.img)
     - ls -al /dev
     - sudo mount ${SD_LOOPDEVICE}p1 mounted_root
-    - sudo mkdir mounted_root/root/.ssh
+    - sudo mkdir -p mounted_root/root/.ssh
     - echo ${SSH_AUTHORIZED_KEYS} | sudo tee mounted_root/root/.ssh/authorized_keys
     - sudo chmod 600 mounted_root/root/.ssh/authorized_keys
     - sync && sudo umount mounted_root
