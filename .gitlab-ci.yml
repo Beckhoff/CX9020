@@ -14,11 +14,11 @@ build-docker-image:
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN ${REGISTRY_HOST}
     - docker build -t cx9020_builder .
-    - docker tag cx9020_builder ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
-    - docker push ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
+    - docker tag cx9020_builder ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
+    - docker push ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
 
 build:
-  image: ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
+  image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
   tags: 
     - docker
     - privileged
@@ -31,7 +31,7 @@ build:
       - sdcard.img
 
 add-ssh:
-  image: ${REGISTRY_HOST}/beckhoff/cx9020:latest_builder
+  image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
   tags: 
     - docker
     - privileged
