@@ -31,6 +31,10 @@ ${SCRIPT_PATH}/50_install_kernel.sh ${ROOTFS_MOUNT}
 ${SCRIPT_PATH}/52_install_etherlab.sh ${ROOTFS_MOUNT}
 ${SCRIPT_PATH}/60_install_configuration.sh ${ROOTFS_MOUNT}
 
+# install read only init script
+cp ${SCRIPT_PATH}/../tools/init-ro ${ROOTFS_MOUNT}/sbin/
+cp ${SCRIPT_PATH}/../tools/enable-rootfs-ro.sh ${ROOTFS_MOUNT}/usr/bin/
+
 # remove chroot helpers
 rm ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 rm ${ROOTFS_MOUNT}/etc/resolv.conf

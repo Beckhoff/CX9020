@@ -1,0 +1,18 @@
+#!/bin/bash
+
+mount -o remount,rw /
+
+mkdir -p /init_tmp/rootfs /init_tmp/overlay
+mount -t tmpfs tmpfs /init_tmp/overlay
+mkdir -p /init_tmp/rootfs /init_tmp/overlay/upper /init_tmp/overlay/work
+mount -t overlay overlay /init_tmp/rootfs -o lowerdir=/,upperdir=/init_tmp/overlay/upper,workdir=/init_tmp/overlay/work
+
+mkdir -p /init_tmp/rootfs/oldroot
+
+echo "" > /init_tmp/rootfs/etc/fstab
+mount -o remount,ro /
+
+# note: the cd is documented in pivot_roots manpage
+cd /init_tmp/rootfs
+pivot_root . oldroot
+exec /sbin/init
