@@ -60,15 +60,7 @@ test:
     - trap 'export real_exit_code=$?; echo "Stopped by trap"; 41_reset_sd.sh ${DEVICE_ID}-${DEVICE};50_power.sh ${DEVICE_ID}-${DEVICE} 0 || true; 99_cleanup.sh || true;  sleep 5 && exit $real_exit_code' SIGINT SIGTERM EXIT
     - source 09_init.sh
     - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 40_flash_sd.sh sdcard.img
-    - 50_power.sh ${DEVICE_ID}-${DEVICE} 1
-    - 51_wait.sh ${DEVICE_ID}-${DEVICE} root
-    - scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r ./tests/ root@${TEST_DEVICE_IP}:~/
-    - ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${TEST_DEVICE_IP} tests/${SCRIPTNAME}.sh
+    - .ci/test_stage.sh & wait $!
   variables:
     DEVICE: 'CX9020'
     DEVICE_ID: 'CX09'
