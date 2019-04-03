@@ -45,6 +45,7 @@ add-ssh:
     - echo ${SSH_AUTHORIZED_KEYS} | sudo tee mounted_root/root/.ssh/authorized_keys
     - sudo chmod 600 mounted_root/root/.ssh/authorized_keys
     - sync && sudo umount mounted_root
+    - losetup -d ${SD_LOOPDEVICE}
   artifacts:
     expire_in: 2 weeks
     paths:
