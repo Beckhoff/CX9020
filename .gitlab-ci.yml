@@ -77,3 +77,22 @@ test:
       - add-ssh
   tags:
     - CX09-CX9020
+
+test-manual:
+  image: ${REGISTRY_HOST}/beckhoff/test_runner:1.2
+  stage: test
+  script:
+    - trap 'export real_exit_code=$?; echo "Stopped by trap"; 41_reset_sd.sh ${DEVICE_ID}-${DEVICE};50_power.sh ${DEVICE_ID}-${DEVICE} 0 || true; 99_cleanup.sh || true;  sleep 5 && exit $real_exit_code' SIGINT SIGTERM EXIT
+    - source 09_init.sh
+    - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
+    - .ci/test_stage.sh || true
+    - sleep 3600
+  variables:
+    DEVICE: 'CX9020'
+    DEVICE_ID: 'CX09'
+    SCRIPTNAME: 'test_boot'
+  dependencies:
+      - add-ssh
+  tags:
+    - CX09-CX9020
+  when: manual
