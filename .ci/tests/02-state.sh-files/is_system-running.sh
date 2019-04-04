@@ -12,5 +12,6 @@ done
 ret=0
 systemctl is-system-running || ret=$?
 
+journalctl -p 3
 systemctl list-units --state=failed
 exit $ret
