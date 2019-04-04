@@ -18,6 +18,7 @@ sudo apt-get install --no-install-recommends -o Dpkg::Options::="--force-confold
 	g++-5-arm-linux-gnueabihf \
 	git \
 	gpg \
+	kmod \
 	lib32ncurses5-dev \
 	lib32stdc++6 \
 	lib32z1 \
