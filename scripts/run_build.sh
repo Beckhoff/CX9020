@@ -2,7 +2,6 @@
 set -e
 
 tools/prepare_uboot.sh v2018.11
-make uboot-tests
 make uboot
 tools/prepare_kernel.sh v4.20
 make kernel
