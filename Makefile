@@ -1,3 +1,4 @@
+ACONTIS_ECMASTER=acontis/EC-Master
 ETHERLAB=ethercat-hg
 KERNEL=kernel
 UBOOT=u-boot
@@ -5,6 +6,10 @@ CCAT=ccat
 
 CROSS_PREFIX=arm-none-eabi-
 MAKE_JOBS=-j `nproc`
+
+acontis-atemsys: CROSS_PREFIX=arm-linux-gnueabihf-
+acontis-atemsys:
+	cd ${ACONTIS_ECMASTER}/Sources/LinkOsLayer/Linux/atemsys && make MAKEFLAGS=ARCH=arm KDIR=$(CURDIR)/${KERNEL} KERNELDIR=$(CURDIR)/${KERNEL} CROSS_COMPILE=${CROSS_PREFIX} modules
 
 etherlab: CROSS_PREFIX=arm-linux-gnueabihf-
 etherlab:
@@ -32,4 +37,4 @@ kernel:
 	cp -a ${KERNEL}/.config kernel-patches/config-CX9020
 	cd ${CCAT} && make MAKEFLAGS=ARCH=arm KDIR=$(CURDIR)/$(KERNEL) CROSS_COMPILE=${CROSS_PREFIX}
 
-.PHONY: busybox dropbear glibc kernel install uboot prepare_disk install_rootfs install_small install_smallrootfs post_install install_debian
+.PHONY: busybox dropbear glibc kernel install uboot uboot-tests prepare_disk install_rootfs install_small install_smallrootfs post_install install_debian acontis-atemsys etherlab
