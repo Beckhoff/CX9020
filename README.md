@@ -23,6 +23,12 @@ cd CX9020/
 #=============
 make uboot
 
+#integrate acontis kernel extension atemsys from EC-Master SDK for emllCCAT support (optional):
+#==============================================================================================
+# The acontis EC-Master evaluation version can be requested at https://www.acontis.com/en/eceval.html
+export ACONTIS_EC_MASTER_SDK_PACKAGE=~/Downloads/EC-Master-V3.0-Linux_armv6-vfp-eabihf-Eval.tar.gz
+./tools/prepare_acontis_ecmaster.sh
+
 #get and patch a rt kernel:
 #==========================
 ./tools/prepare_kernel.sh v4.20
@@ -30,6 +36,10 @@ make uboot
 #configure and build the kernel:
 #===============================
 make kernel
+
+#build the acontis atemsys kernel module (optional):
+#===================================================
+make acontis-atemsys
 
 #get and patch etherlab (optional):
 #==================================
@@ -53,6 +63,13 @@ User:     root
 Password: root
 
 Please change the root password immediately and additionally create your own user.
+
+### acontis EC-Master example (optional)
+To run the EcMasterDemo, extract the EC-Master SDK in /opt/EC-Master and start it from /opt/EC-Master/Bin/Linux/armv6-vfp-eabihf using:
+```
+EcMasterDemo -ccat 1 1
+```
+See manuals in the SDK's "Doc" folder for how to build and run EC-Master applications
 
 ## History
 **TODO:** Write history

@@ -28,6 +28,7 @@ chmod u+x ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh"
 
 ${SCRIPT_PATH}/50_install_kernel.sh ${ROOTFS_MOUNT}
+${SCRIPT_PATH}/51_install_acontis_ecmaster.sh ${ROOTFS_MOUNT}
 ${SCRIPT_PATH}/52_install_etherlab.sh ${ROOTFS_MOUNT}
 ${SCRIPT_PATH}/60_install_configuration.sh ${ROOTFS_MOUNT}
 
