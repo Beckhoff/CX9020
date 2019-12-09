@@ -30,14 +30,6 @@ build:
     paths:
       - sdcard.img
 
-uboot-test:
-  image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
-  tags:
-    - docker
-  stage: build
-  script:
-    - scripts/run_uboot_test.sh
-
 add-ssh:
   image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
   tags: 
