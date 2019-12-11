@@ -12,9 +12,9 @@ fi
 
 RT_VERSION=${1}
 REPO=kernel
-#GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 #GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+#GIT_REMOTE=https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 
 ccat_remote="${ccat_remote:-https://github.com/Beckhoff/CCAT}"
 ccat_branch="${ccat_branch:-master}"
@@ -22,7 +22,7 @@ ccat_branch="${ccat_branch:-master}"
 # clone a clean linux-rt-devel repository
 git clone ${GIT_REMOTE} ${REPO} ${GIT_CLONE_ARGS} ${KERNEL_CLONE_ARGS}
 pushd ${REPO}
-git checkout ${RT_VERSION} -b dev-${RT_VERSION}
+git checkout origin/${RT_VERSION} -b dev-${RT_VERSION}
 
 # apply cx9020 patches
 git am -3  ../kernel-patches/000*
