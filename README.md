@@ -17,7 +17,7 @@ cd CX9020/
 
 #get and patch the u-boot sources:
 #=================================
-./tools/prepare_uboot.sh v2018.11
+./tools/prepare_uboot.sh v2019.10
 
 #build u-boot:
 #=============
@@ -31,7 +31,7 @@ export ACONTIS_EC_MASTER_SDK_PACKAGE=~/Downloads/EC-Master-V3.0-Linux_armv6-vfp-
 
 #get and patch a rt kernel:
 #==========================
-./tools/prepare_kernel.sh v4.20
+./tools/prepare_kernel.sh v4.19-rt
 
 #configure and build the kernel:
 #===============================

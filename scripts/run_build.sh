@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-tools/prepare_uboot.sh v2018.11
+tools/prepare_uboot.sh v2019.10
 make uboot
-tools/prepare_kernel.sh v4.20
+tools/prepare_kernel.sh v4.19-rt
 make kernel
 tools/prepare_etherlab.sh
 make etherlab

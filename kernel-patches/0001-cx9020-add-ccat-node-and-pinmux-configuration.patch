@@ -1,11 +1,11 @@
-From df97e868652b8616a68b004aaa83c00989b0e31c Mon Sep 17 00:00:00 2001
+From 9559716987911dc71a39cd3fce48a97d96f13c8e Mon Sep 17 00:00:00 2001
 From: Patrick Bruenn <p.bruenn@beckhoff.com>
 Date: Thu, 20 Jul 2017 11:49:04 +0200
 Subject: [PATCH 1/2] cx9020: add ccat node and pinmux configuration
 
 Signed-off-by: Patrick Bruenn <p.bruenn@beckhoff.com>
 ---
- arch/arm/boot/dts/imx53-cx9020.dts | 63 ++++++++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/imx53-cx9020.dts | 63 ++++++++++++++++++++++++++++++
  1 file changed, 63 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx53-cx9020.dts b/arch/arm/boot/dts/imx53-cx9020.dts
@@ -90,5 +90,5 @@ index cf70ebc4399a..a50c8dc9e3c2 100644
  		fsl,pins = <
  			MX53_PAD_SD1_DATA0__ESDHC1_DAT0		0x1d5
 -- 
-2.11.0
+2.24.0
 

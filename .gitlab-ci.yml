@@ -30,14 +30,6 @@ build:
     paths:
       - sdcard.img
 
-uboot-test:
-  image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
-  tags:
-    - docker
-  stage: build
-  script:
-    - scripts/run_uboot_test.sh
-
 add-ssh:
   image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
   tags: 
@@ -62,10 +54,9 @@ add-ssh:
       - build
 
 test:
-  image: ${REGISTRY_HOST}/beckhoff/test_runner:1.2
+  image: ${REGISTRY_HOST}/beckhoff/test_runner:2.3-master
   stage: test
   script:
-    - trap 'export real_exit_code=$?; echo "Stopped by trap"; 50_power.sh ${DEVICE_ID}-${DEVICE} 0 || true; 41_reset_sd.sh ${DEVICE_ID}-${DEVICE}; 99_cleanup.sh || true; sleep 5 && exit $real_exit_code' SIGINT SIGTERM EXIT
     - source 09_init.sh
     - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
     - .ci/test_stage.sh & wait $!
@@ -79,10 +70,9 @@ test:
     - CX09-CX9020
 
 test-manual:
-  image: ${REGISTRY_HOST}/beckhoff/test_runner:1.2
+  image: ${REGISTRY_HOST}/beckhoff/test_runner:2.3-master
   stage: test
   script:
-    - trap 'export real_exit_code=$?; echo "Stopped by trap"; 50_power.sh ${DEVICE_ID}-${DEVICE} 0 || true; 41_reset_sd.sh ${DEVICE_ID}-${DEVICE}; 99_cleanup.sh || true; sleep 5 && exit $real_exit_code' SIGINT SIGTERM EXIT
     - source 09_init.sh
     - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
     - .ci/test_stage.sh || true
