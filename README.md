@@ -23,12 +23,6 @@ cd CX9020/
 #=============
 make uboot
 
-#integrate acontis kernel extension atemsys from EC-Master SDK for emllCCAT support (optional):
-#==============================================================================================
-# The acontis EC-Master evaluation version can be requested at https://www.acontis.com/en/eceval.html
-export ACONTIS_EC_MASTER_SDK_PACKAGE=~/Downloads/EC-Master-V3.0-Linux_armv6-vfp-eabihf-Eval.tar.gz
-./tools/prepare_acontis_ecmaster.sh
-
 #get and patch a rt kernel:
 #==========================
 ./tools/prepare_kernel.sh v4.19-rt
@@ -37,8 +31,11 @@ export ACONTIS_EC_MASTER_SDK_PACKAGE=~/Downloads/EC-Master-V3.0-Linux_armv6-vfp-
 #===============================
 make kernel
 
-#build the acontis atemsys kernel module (optional):
-#===================================================
+#integrate acontis kernel extension atemsys from EC-Master SDK for emllCCAT support (optional):
+#==============================================================================================
+export ACONTIS_EC_MASTER_SDK_PACKAGE=$PWD/EC-Master-V3.0-Linux_armv6-vfp-eabihf-Eval.tar.gz
+wget -O $ACONTIS_EC_MASTER_SDK_PACKAGE http://software.acontis.com/EC-Master/3.0/EC-Master-V3.0-Linux_armv6-vfp-eabihf-Eval.tar.gz
+./tools/prepare_acontis_ecmaster.sh
 make acontis-atemsys
 
 #get and patch etherlab (optional):
