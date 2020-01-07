@@ -24,4 +24,12 @@ popd
 
 printf "atemsys\n" > ${ROOTFS_MOUNT}/etc/modules-load.d/atemsys.conf
 
+cp -ar ${ACONTIS_ECMASTER} ${ROOTFS_MOUNT}/opt/
+
+# Create /usr/local/bin/RunEcMasterDemo.sh
+printf "#!/bin/sh\n" > ${ROOTFS_MOUNT}/usr/local/bin/RunEcMasterDemo.sh
+printf "cd /opt/EC-Master/Bin/Linux/armv6-vfp-eabihf\n" >> ${ROOTFS_MOUNT}/usr/local/bin/RunEcMasterDemo.sh
+printf "./EcMasterDemo -ccat 1 1\n" >> ${ROOTFS_MOUNT}/usr/local/bin/RunEcMasterDemo.sh
+chmod a+x ${ROOTFS_MOUNT}/usr/local/bin/RunEcMasterDemo.sh
+
 fi
