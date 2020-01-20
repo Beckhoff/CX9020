@@ -8,4 +8,11 @@ mkdir -p ~/.ssh
 40_flash_sd.sh sdcard.img
 50_power.sh ${DEVICE_ID}-${DEVICE} 1
 51_wait.sh ${DEVICE_ID}-${DEVICE} root
-.ci/run_tests.sh root "${TEST_DEVICE_IP}"
+
+if ! test -z ${CI_JOB_MANUAL-}; then
+	.ci/run_tests.sh root "${TEST_DEVICE_IP}" || true
+	sleep 1h
+else
+	.ci/run_tests.sh root "${TEST_DEVICE_IP}" &
+	wait $!
+fi

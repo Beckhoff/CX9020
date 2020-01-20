@@ -53,13 +53,13 @@ add-ssh:
   dependencies:
       - build
 
-test:
+.test-template: &test-template
   image: ${REGISTRY_HOST}/beckhoff/test_runner:2.3-master
   stage: test
   script:
     - source 09_init.sh
     - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
-    - .ci/test_stage.sh & wait $!
+    - .ci/test_stage.sh
   variables:
     DEVICE: 'CX9020'
     DEVICE_ID: 'CX09'
@@ -69,20 +69,9 @@ test:
   tags:
     - CX09-CX9020
 
+test:
+  <<: *test-template
+
 test-manual:
-  image: ${REGISTRY_HOST}/beckhoff/test_runner:2.3-master
-  stage: test
-  script:
-    - source 09_init.sh
-    - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
-    - .ci/test_stage.sh || true
-    - sleep 3600
-  variables:
-    DEVICE: 'CX9020'
-    DEVICE_ID: 'CX09'
-    SCRIPTNAME: 'test_boot'
-  dependencies:
-      - add-ssh
-  tags:
-    - CX09-CX9020
+  <<: *test-template
   when: manual
