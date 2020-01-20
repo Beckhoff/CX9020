@@ -28,6 +28,11 @@ build-docker-image:
     paths:
       - sdcard.img
 
+build:acontis:
+  <<: *build-template
+  script:
+    - scripts/run_build.sh
+
 build:etherlab:
   <<: *build-template
   script:
@@ -54,6 +59,11 @@ build:etherlab:
     paths:
       - sdcard.img
 
+add-ssh:acontis:
+  <<: *add-ssh-template
+  dependencies:
+      - build:acontis
+
 add-ssh:etherlab:
   <<: *add-ssh-template
   dependencies:
@@ -73,10 +83,21 @@ add-ssh:etherlab:
   tags:
     - CX09-CX9020
 
+test:acontis:
+  <<: *test-template
+  dependencies:
+      - add-ssh:acontis
+
 test:etherlab:
   <<: *test-template
   dependencies:
       - add-ssh:etherlab
+
+test-manual:acontis:
+  <<: *test-template
+  dependencies:
+      - add-ssh:acontis
+  when: manual
 
 test-manual:etherlab:
   <<: *test-template
