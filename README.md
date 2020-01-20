@@ -33,10 +33,8 @@ make kernel
 
 #integrate acontis kernel extension atemsys from EC-Master SDK for emllCCAT support (optional):
 #==============================================================================================
-export ACONTIS_EC_MASTER_SDK_PACKAGE=$PWD/EC-Master-V3.0-Linux_armv6-vfp-eabihf-Eval.tar.gz
-wget -O $ACONTIS_EC_MASTER_SDK_PACKAGE http://software.acontis.com/EC-Master/3.0/EC-Master-V3.0-Linux_armv6-vfp-eabihf-Eval.tar.gz
-./tools/prepare_acontis_ecmaster.sh
-make acontis-atemsys
+./tools/prepare_acontis.sh
+make acontis
 
 #get and patch etherlab (optional):
 #==================================
