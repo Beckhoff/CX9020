@@ -17,20 +17,23 @@ build-docker-image:
     - docker tag cx9020_builder ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
     - docker push ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
 
-build:
+.build-template: &build-template
   image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
   tags: 
     - docker
     - privileged
   stage: build
-  script:
-    - scripts/run_build.sh
   artifacts:
     expire_in: 2 weeks
     paths:
       - sdcard.img
 
-add-ssh:
+build:etherlab:
+  <<: *build-template
+  script:
+    - scripts/run_build.sh
+
+.add-ssh-template: &add-ssh-template
   image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
   tags: 
     - docker
@@ -50,8 +53,11 @@ add-ssh:
     expire_in: 2 weeks
     paths:
       - sdcard.img
+
+add-ssh:etherlab:
+  <<: *add-ssh-template
   dependencies:
-      - build
+      - build:etherlab
 
 .test-template: &test-template
   image: ${REGISTRY_HOST}/beckhoff/test_runner:2.3-master
@@ -64,14 +70,16 @@ add-ssh:
     DEVICE: 'CX9020'
     DEVICE_ID: 'CX09'
     SCRIPTNAME: 'test_boot'
-  dependencies:
-      - add-ssh
   tags:
     - CX09-CX9020
 
-test:
+test:etherlab:
   <<: *test-template
+  dependencies:
+      - add-ssh:etherlab
 
-test-manual:
+test-manual:etherlab:
   <<: *test-template
+  dependencies:
+      - add-ssh:etherlab
   when: manual
