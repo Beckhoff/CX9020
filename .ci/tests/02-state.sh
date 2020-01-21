@@ -11,3 +11,4 @@ ssh_cmd="ssh $ssh_options $ssh_remote"
 
 scp -r $ssh_options ${extra_dir} $ssh_remote:~/
 ${ssh_cmd} "${extra_dir_basename}/is_system-running.sh"
+${ssh_cmd} "${extra_dir_basename}/30_ethercat_master.sh \"${CI_JOB_NAME}\""
