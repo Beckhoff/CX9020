@@ -25,6 +25,8 @@ chmod u+x ${ROOTFS_MOUNT}/install_rootfs_second_stage.sh
 /bin/mknod -m 0666 ${ROOTFS_MOUNT}/dev/null c 1 3
 /bin/mknod -m 0666 ${ROOTFS_MOUNT}/dev/random c 1 8
 /bin/mknod -m 0444 ${ROOTFS_MOUNT}/dev/urandom c 1 9
+
+update-binfmts --enable qemu-arm
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "./install_rootfs_second_stage.sh"
 
 ${SCRIPT_PATH}/50_install_kernel.sh ${ROOTFS_MOUNT}
