@@ -1,0 +1,71 @@
+on: [push]
+
+jobs:
+  build-images:
+    runs-on: ubuntu-18.04
+    steps:
+
+      - name: Checkout the CX9020 repository
+        uses: actions/checkout@v3
+
+      - name: Prepare the machine
+        run: tools/10_prepare_host_ubuntu1804.sh
+
+      - name: Setup git user
+        run: |
+          git config --global user.name 'runner'
+          git config --global user.email 'runner@CX9020'
+
+      - name: Get and patch the u-boot sources
+        run: tools/prepare_uboot.sh v2019.10
+
+      - name: Build u-boot
+        run: make uboot
+
+      - name: Get and patch a rt kernel
+        run: tools/prepare_kernel.sh v4.19-rt
+
+      - name: Configure and build the kernel
+        run: make kernel
+
+      - name: Get and patch etherlab
+        run: tools/prepare_etherlab.sh
+
+      - name: Configure and build etherlab
+        run: make etherlab
+
+      - name: Build sdcard.img for etherlab
+        # This requires root privileges
+        run: sudo scripts/build_sdimage.sh
+
+      - name: Archive etherlab image
+        uses: actions/upload-artifact@v3
+        with:
+          name: sdcard-image-etherlab
+          path: sdcard.img
+          if-no-files-found: error
+          retention-days: 2
+
+      - name: Clean up etherlab artifacts
+        run: sudo rm -fr ethercat-hg/ sdcard.img
+
+      # XXX: prepare_acontis.sh fails on start up
+      #      See https://github.com/ntd/CX9020/runs/6859336784
+
+      #- name: Prepare acontis
+      #  run: tools/prepare_acontis.sh
+
+      #- name: Integrate acontis kernel extension atemsys from EC-Master SDK for emllCCAT support
+      #  run: make acontis
+
+      #- name: Build sdcard.img for Acontis
+      #  # This requires root privileges
+      #  run: sudo scripts/build_sdimage.sh
+
+      #- name: Archive acontis image
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: sdcard-image-acontis
+      #    path: sdcard.img
+      #    if-no-files-found: error
+      #    retention-days: 2
