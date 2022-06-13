@@ -29,7 +29,7 @@ uboot:
 
 kernel: CROSS_PREFIX=arm-linux-gnueabihf-
 kernel:
-	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} oldconfig
+	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} olddefconfig
 #	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} menuconfig
 	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS}
 	cd ${KERNEL} && make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} ${MAKE_JOBS} modules
