@@ -47,7 +47,7 @@ sudo pip install \
 	pyfdt
 
 # patch multistrap (https://github.com/volumio/Build/issues/348)
-sed -i '/^$config_str .= " -o Apt::Get::AllowUnauthenticated=true"$/i  $config_str .= " -o Acquire::AllowInsecureRepositories=true";' /usr/sbin/multistrap
+sudo sed -i '/^$config_str .= " -o Apt::Get::AllowUnauthenticated=true"$/i  $config_str .= " -o Acquire::AllowInsecureRepositories=true";' /usr/sbin/multistrap
 
 sudo ln -s /usr/bin/arm-linux-gnueabihf-gcc-5 /usr/bin/arm-linux-gnueabihf-gcc
 sudo ln -s /usr/bin/arm-linux-gnueabihf-g++-5 /usr/bin/arm-linux-gnueabihf-g++
