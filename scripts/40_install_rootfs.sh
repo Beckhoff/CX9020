@@ -11,8 +11,6 @@ fi
 ROOTFS_MOUNT=$1
 SCRIPT_PATH="`dirname \"$0\"`"
 
-trap "sudo umount -f ${ROOTFS_MOUNT}/dev || true; exit" INT TERM EXIT
-
 #debian rootfs
 echo "Building debian rootfs..."
 
