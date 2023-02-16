@@ -8,6 +8,13 @@ integrate internal switches to provide more than one RJ45 port.
 Modify the generic phy driver to report 'link up' if any of the external
 ports senses a link. Add 'phy_driver.num_phys' module option to enable
 the multiplexing behaviour if set to > 1.
+
+In addition, since kernel 4.19.99, 'genphy_soft_reset' only write
+BMCR_RESET bit, which cause port 2 (X001) no becoming up after a soft-
+reboot. This was reverted to ensure this port became up after reboot.
+This fix also re-enable autonegociation in MII_BMCR registers as
+without it, port X001 stay 10Mb after we plug it if system has boot
+with port X000 connected only.
 ---
  drivers/net/phy/phy_device.c | 47 +++++++++++++++++++++++++++++++++++-
  1 file changed, 46 insertions(+), 1 deletion(-)
@@ -16,7 +23,7 @@ diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
 index 6144146aec29..072a6e515dfa 100644
 --- a/drivers/net/phy/phy_device.c
 +++ b/drivers/net/phy/phy_device.c
-@@ -42,6 +42,10 @@ MODULE_DESCRIPTION("PHY library");
+@@ -42,6 +42,10 @@
  MODULE_AUTHOR("Andy Fleming");
  MODULE_LICENSE("GPL");
  
@@ -27,7 +34,7 @@ index 6144146aec29..072a6e515dfa 100644
  void phy_device_free(struct phy_device *phydev)
  {
  	put_device(&phydev->mdio.dev);
-@@ -1643,6 +1647,32 @@ int genphy_read_status(struct phy_device *phydev)
+@@ -1651,6 +1655,32 @@
  }
  EXPORT_SYMBOL(genphy_read_status);
  
@@ -60,7 +67,20 @@ index 6144146aec29..072a6e515dfa 100644
  /**
   * genphy_soft_reset - software reset the PHY via BMCR_RESET bit
   * @phydev: target phy_device struct
-@@ -1664,6 +1694,20 @@ int genphy_soft_reset(struct phy_device *phydev)
+@@ -1664,7 +1694,11 @@
+ {
+ 	int ret;
+ 
+-	ret = phy_set_bits(phydev, MII_BMCR, BMCR_RESET);
++	ret = phy_write(phydev, MII_BMCR, BMCR_RESET);
++	if (ret < 0)
++		return ret;
++	/* re-enable auto-negociation */
++	ret = phy_set_bits(phydev, MII_BMCR, BMCR_ANENABLE);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1672,6 +1706,20 @@
  }
  EXPORT_SYMBOL(genphy_soft_reset);
  
@@ -81,7 +101,7 @@ index 6144146aec29..072a6e515dfa 100644
  int genphy_config_init(struct phy_device *phydev)
  {
  	int val;
-@@ -1993,12 +2037,13 @@ static struct phy_driver genphy_driver = {
+@@ -2001,12 +2049,13 @@
  	.phy_id		= 0xffffffff,
  	.phy_id_mask	= 0xffffffff,
  	.name		= "Generic PHY",
@@ -96,6 +116,6 @@ index 6144146aec29..072a6e515dfa 100644
  	.suspend	= genphy_suspend,
  	.resume		= genphy_resume,
  	.set_loopback   = genphy_loopback,
+
 -- 
 2.24.0
-
