@@ -8,7 +8,7 @@ Please make sure to follow the steps below to create your microSD card.
 ```
 #prepare your machine f.e.: 64-bit Ubuntu 18.04 LTS would require:
 #=================================================================
-./tools/10_prepare_host_ubuntu1804.sh
+./tools/10_prepare_host_debian11.sh
 
 # get the repository:
 #====================

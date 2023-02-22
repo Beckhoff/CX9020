@@ -6,10 +6,7 @@ set -e
 export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 export LC_ALL=C LANGUAGE=C LANG=C
 
-/var/lib/dpkg/info/dash.preinst install
 cp -a /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
-dpkg --configure -a
-
-echo 'root:root' | chpasswd
+echo 'root:root' | /usr/sbin/chpasswd
 echo 'CX9020' > /etc/hostname
