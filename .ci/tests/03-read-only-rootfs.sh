@@ -11,6 +11,6 @@ ssh_cmd="ssh $ssh_options $ssh_remote"
 ${ssh_cmd} 'enable-rootfs-ro.sh'
 ${ssh_cmd} 'nohup reboot &>/dev/null & exit'
 sleep 10
-51_wait.sh ${DEVICE_ID}-${DEVICE} root
+wait_ssh ${ssh_remote}
 ${ssh_cmd} 'mount' | grep mmc | grep "ro,"
 ${ssh_cmd} 'touch test'

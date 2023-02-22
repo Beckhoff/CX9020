@@ -1,24 +1,20 @@
+image: ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}
+
 stages:
   - build-docker-image
   - build
-  - add-ssh
   - test
 
 
-build-docker-image:
-  image: docker:latest
+docker-image:
+  image: ${REGISTRY_HOST}/beckhoff/okinak:master
   stage: build-docker-image
   tags:
     - docker
     - privileged
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN ${REGISTRY_HOST}
-    - docker build -t cx9020_builder .
-    - docker tag cx9020_builder ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
-    - docker push ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
+  script: okinak
 
 .build-template: &build-template
-  image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
   tags: 
     - docker
     - privileged
@@ -28,79 +24,42 @@ build-docker-image:
     paths:
       - sdcard.img
 
-build:acontis:
-  <<: *build-template
-  script:
-    - scripts/run_build.sh
-
 build:etherlab:
   <<: *build-template
   script:
     - scripts/run_build.sh
 
-.add-ssh-template: &add-ssh-template
-  image: ${REGISTRY_HOST}/beckhoff/cx9020:$CI_PIPELINE_ID
-  tags: 
-    - docker
-    - privileged
-  stage: add-ssh
+build:acontis:
+  <<: *build-template
   script:
-    - mkdir mounted_root
-    - export SD_LOOPDEVICE=$(sudo losetup --show -Pf sdcard.img)
-    - ls -al /dev
-    - sudo mount ${SD_LOOPDEVICE}p1 mounted_root
-    - sudo mkdir -p mounted_root/root/.ssh
-    - echo ${SSH_AUTHORIZED_KEYS} | sudo tee mounted_root/root/.ssh/authorized_keys
-    - sudo chmod 600 mounted_root/root/.ssh/authorized_keys
-    - sync && sudo umount mounted_root
-    - losetup -d ${SD_LOOPDEVICE}
-  artifacts:
-    expire_in: 2 weeks
-    paths:
-      - sdcard.img
-
-add-ssh:acontis:
-  <<: *add-ssh-template
-  dependencies:
-      - build:acontis
-
-add-ssh:etherlab:
-  <<: *add-ssh-template
-  dependencies:
-      - build:etherlab
+    - scripts/run_build.sh
 
 .test-template: &test-template
-  image: ${REGISTRY_HOST}/beckhoff/test_runner:2.3-master
+  image: ${REGISTRY_HOST}/beckhoff/test_stage/test_runner:v4.45
   stage: test
   script:
-    - source 09_init.sh
-    - 50_power.sh ${DEVICE_ID}-${DEVICE} 0
     - .ci/test_stage.sh
-  variables:
-    DEVICE: 'CX9020'
-    DEVICE_ID: 'CX09'
-    SCRIPTNAME: 'test_boot'
   tags:
-    - CX09-CX9020
+    - CX9020
 
 test:acontis:
   <<: *test-template
   dependencies:
-      - add-ssh:acontis
+      - build:acontis
 
 test:etherlab:
   <<: *test-template
   dependencies:
-      - add-ssh:etherlab
+      - build:etherlab
 
 test-manual:acontis:
   <<: *test-template
   dependencies:
-      - add-ssh:acontis
+      - build:acontis
   when: manual
 
 test-manual:etherlab:
   <<: *test-template
   dependencies:
-      - add-ssh:etherlab
+      - build:etherlab
   when: manual
