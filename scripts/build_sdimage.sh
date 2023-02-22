@@ -21,7 +21,7 @@ trap cleanup INT TERM EXIT
 
 
 dd if=/dev/zero of="${IMAGE}" bs=1M count="${image_size_mb}"
-mkfs.ext2 -F -E offset=1048576 "${IMAGE}"
+mkfs.ext4 -F -E offset=1048576 "${IMAGE}"
 dd if=${MBR} of=${IMAGE} conv=notrunc
 "${SCRIPT_PATH}/20_install_uboot.sh" "${IMAGE}"
 sfdisk ${SFDISK_OPTIONS} ${IMAGE} < ${PARTITION_CONFIG}
