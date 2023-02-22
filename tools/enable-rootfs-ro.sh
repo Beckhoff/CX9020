@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sed -i '\|optargs| s|$| init=/sbin/init-ro|' /boot/uEnv.txt
+sed -i '\|APPEND| s|$| init=/sbin/init-ro|' /boot/extlinux.conf.after

@@ -9,7 +9,7 @@ fi
 
 VERSION=$1
 
-git clone http://git.denx.de/u-boot.git ${GIT_CLONE_ARGS} ${UBOOT_CLONE_ARGS}
+git clone https://source.denx.de/u-boot/u-boot.git/ ${GIT_CLONE_ARGS} ${UBOOT_CLONE_ARGS}
 pushd u-boot/
 git checkout ${VERSION} -b dev-${VERSION}
 #git am -3 ../u-boot-patches/000*

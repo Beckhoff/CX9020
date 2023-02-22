@@ -17,7 +17,7 @@ cd CX9020/
 
 #get and patch the u-boot sources:
 #=================================
-./tools/prepare_uboot.sh v2019.10
+./tools/prepare_uboot.sh v2022.10
 
 #build u-boot:
 #=============

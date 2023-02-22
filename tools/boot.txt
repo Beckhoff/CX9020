@@ -1,0 +1,8 @@
+setenv ccatfile /boot/ccat.rbf
+setenv extlinux_conf /boot/extlinux.conf.after
+echo loading CCAT firmware from mmc ${devtype} ${devnum}:${distro_bootpart} ${ccatfile}
+load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${ccatfile}
+fpga load 0 ${loadaddr} ${filesize}
+
+env print
+sysboot ${devtype} ${devnum}:${distro_bootpart} any ${pxefile_addr_r} ${extlinux_conf}

@@ -14,6 +14,8 @@ KERNEL=kernel
 kernel_version=`cat ${KERNEL}/include/config/kernel.release`
 ccat_modules=ccat/*ko
 CCAT_FIRMWARE=tools/ccat.rbf
+UBOOT_SCRIPT=tools/boot.scr
+UBOOT_SCRIPT_TXT=tools/boot.txt
 
 CROSS_PREFIX=arm-linux-gnueabihf-
 
@@ -26,13 +28,10 @@ make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} INSTALL_MOD_PATH=${ROOTFS_MOUNT} mod
 popd
 mkdir -p ${ROOTFS_MOUNT}/boot
 cp -v ${KERNEL}/arch/arm/boot/zImage ${ROOTFS_MOUNT}/boot/vmlinuz-${kernel_version}
-sh -c "echo 'uname_r=${kernel_version}' > ${ROOTFS_MOUNT}/boot/uEnv.txt"
-sh -c "echo 'optargs=libphy.num_phys=2 console=tty0 quiet' >> ${ROOTFS_MOUNT}/boot/uEnv.txt"
 
 # install device tree binary
 mkdir -p ${ROOTFS_MOUNT}/boot/dtbs/${kernel_version}/
 cp -a ${KERNEL}/arch/arm/boot/dts/imx53-cx9020.dtb ${ROOTFS_MOUNT}/boot/dtbs/${kernel_version}/
-sh -c "echo 'dtb=imx53-cx9020.dtb' >> ${ROOTFS_MOUNT}/boot/uEnv.txt"
 
 # install ccat driver
 mkdir -p ${install_dir}/extra/
@@ -40,6 +39,20 @@ cp ${ccat_modules} ${install_dir}/extra/
 
 # install ccat firmware
 cp -v ${CCAT_FIRMWARE} ${ROOTFS_MOUNT}/boot/ccat.rbf
-sh -c "echo 'ccat=/boot/ccat.rbf' >> ${ROOTFS_MOUNT}/boot/uEnv.txt"
+
+# install u-boot configuration
+cp "${UBOOT_SCRIPT}" "${ROOTFS_MOUNT}/boot/boot.scr"
+cp "${UBOOT_SCRIPT_TXT}" "${ROOTFS_MOUNT}/boot/boot.txt"
+cat > "${ROOTFS_MOUNT}/boot/extlinux.conf.after" <<EOF
+TIMEOUT 20
+PROMPT 1
+DEFAULT linux
+
+LABEL linux
+MENU LABEL Debian Linux
+KERNEL /boot/vmlinuz-${kernel_version}
+DEVICETREEDIR /boot/dtbs/${kernel_version}
+APPEND libphy.num_phys=2 console=tty0 quiet root=/dev/mmcblk0p1
+EOF
 
 echo "DONE: $0!"

@@ -7,7 +7,7 @@ set -u
 
 readonly variant="${CI_JOB_NAME##*:}"
 
-tools/prepare_uboot.sh v2019.10
+tools/prepare_uboot.sh v2022.10
 make uboot
 tools/prepare_kernel.sh v4.19-rt
 make kernel
