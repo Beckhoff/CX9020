@@ -31,7 +31,7 @@ make uboot
 #===============================
 make kernel
 
-#integrate acontis kernel extension atemsys from EC-Master SDK for emllCCAT support (optional):
+#integrate acontis kernel extension atemsys from EC-Master SDK for emllCCAT support (optional, download link is currently broken):
 #==============================================================================================
 ./tools/prepare_acontis.sh
 make acontis

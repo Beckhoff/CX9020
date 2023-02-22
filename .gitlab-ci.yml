@@ -29,11 +29,6 @@ build:etherlab:
   script:
     - scripts/run_build.sh
 
-build:acontis:
-  <<: *build-template
-  script:
-    - scripts/run_build.sh
-
 .test-template: &test-template
   image: ${REGISTRY_HOST}/beckhoff/test_stage/test_runner:v4.45
   stage: test
@@ -42,21 +37,10 @@ build:acontis:
   tags:
     - CX9020
 
-test:acontis:
-  <<: *test-template
-  dependencies:
-      - build:acontis
-
 test:etherlab:
   <<: *test-template
   dependencies:
       - build:etherlab
-
-test-manual:acontis:
-  <<: *test-template
-  dependencies:
-      - build:acontis
-  when: manual
 
 test-manual:etherlab:
   <<: *test-template
