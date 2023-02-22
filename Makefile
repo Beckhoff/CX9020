@@ -1,5 +1,5 @@
 ACONTIS_ECMASTER=acontis/EC-Master
-ETHERLAB=ethercat-hg
+ETHERLAB=ethercat
 KERNEL=kernel
 UBOOT=u-boot
 CCAT=ccat

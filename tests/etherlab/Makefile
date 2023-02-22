@@ -1,4 +1,4 @@
-ECAT_DIR ?= ../../ethercat-hg
+ECAT_DIR ?= ../../ethercat
 ECAT_LIB_DIR = $(ECAT_DIR)/include/
 ECAT_LIB = $(ECAT_DIR)/lib/.libs/libethercat.a
 

@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # get the etherlab sources
-hg clone http://hg.code.sf.net/p/etherlabmaster/code ethercat-hg
-
-pushd ethercat-hg/
-hg update stable-1.5
-hg import ../ccat/etherlab-patches/000*
+git clone https://gitlab.com/etherlab.org/ethercat.git
+pushd ethercat
+git checkout stable-1.5
+for i in ../ccat/etherlab-patches/*
+    do patch --batch --strip=1 < "$i"
+done
 ./bootstrap

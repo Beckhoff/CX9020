@@ -1,5 +1,5 @@
 tools/gcc-linaro-*
 tools/libtool-*
-ethercat-hg
+ethercat
 kernel
 u-boot

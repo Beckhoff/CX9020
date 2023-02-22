@@ -10,7 +10,7 @@ fi
 
 ROOTFS_MOUNT=$1
 
-ETHERLAB=ethercat-hg
+ETHERLAB=ethercat
 KERNEL=kernel
 
 CROSS_PREFIX=arm-linux-gnueabihf-
@@ -25,9 +25,9 @@ make ARCH=arm CROSS_COMPILE=${CROSS_PREFIX} DESTDIR=${ROOTFS_MOUNT} install
 popd
 
 mkdir -p ${ROOTFS_MOUNT}/etc/sysconfig/
-cp -a ${ROOTFS_MOUNT}/usr/local/etc/sysconfig/ethercat ${ROOTFS_MOUNT}/etc/ethercat.conf
-sed -b -i 's/MASTER0_DEVICE=\"\"/MASTER0_DEVICE=\"ff:ff:ff:ff:ff:ff\"/' ${ROOTFS_MOUNT}/etc/ethercat.conf
-sed -b -i 's/DEVICE_MODULES=\"\"/DEVICE_MODULES=\"ccat_netdev\"/' ${ROOTFS_MOUNT}/etc/ethercat.conf
+cp -a ${ROOTFS_MOUNT}/usr/local/etc/sysconfig/ethercat ${ROOTFS_MOUNT}/etc/sysconfig/ethercat
+sed -b -i 's/MASTER0_DEVICE=\"\"/MASTER0_DEVICE=\"ff:ff:ff:ff:ff:ff\"/' ${ROOTFS_MOUNT}/etc/sysconfig/ethercat
+sed -b -i 's/DEVICE_MODULES=\"\"/DEVICE_MODULES=\"ccat_netdev\"/' ${ROOTFS_MOUNT}/etc/sysconfig/ethercat
 ln -fs /usr/local/etc/init.d/ethercat ${ROOTFS_MOUNT}/etc/init.d/
 printf "ccat\n" > ${ROOTFS_MOUNT}/etc/modules-load.d/ccat.conf
 sudo chroot ${ROOTFS_MOUNT} /bin/bash -c "systemctl enable ethercat"
