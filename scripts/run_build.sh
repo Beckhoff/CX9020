@@ -13,4 +13,4 @@ tools/prepare_kernel.sh v4.19-rt
 make kernel
 tools/prepare_${variant}.sh
 make ${variant}
-sudo http_proxy=${APT_CACHE_SERVER} scripts/build_sdimage.sh
+sudo scripts/build_sdimage.sh
