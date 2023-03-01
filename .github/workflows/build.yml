@@ -20,3 +20,14 @@ jobs:
           path: sdcard.img
           if-no-files-found: error
           retention-days: 2
+  release-image:
+    needs: build-sdcard-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+      - run: |
+          gh release create latest || true
+          gh release upload latest sdcard-image-etherlab/sdcard.img --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
