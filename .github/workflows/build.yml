@@ -19,13 +19,14 @@ jobs:
   release-image:
     needs: build-sdcard-image
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
       - run: ls -alhR .
-      - run: gh release create test-ci-release
+      - run: gh release create ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: gh release upload test-ci-release sdcard-image-etherlab/sdcard.img
+      - run: gh release upload ${{ github.ref_name }} sdcard-image-etherlab/sdcard.img
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
