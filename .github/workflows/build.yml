@@ -8,11 +8,7 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v3
-      - run: apt-get update && apt-get install -y sudo gpg
-      - run: mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc
-      - run: tools/10_prepare_host_debian11.sh
-      - run: git config --global user.name 'nobody' && git config --global user.email 'nobody@example.org'
-      - run: CI_JOB_NAME='build:etherlab' scripts/run_build.sh
+      - run: echo hello > sdcard.img
       - name: Archive etherlab image
         uses: actions/upload-artifact@v3
         with:
@@ -20,3 +16,16 @@ jobs:
           path: sdcard.img
           if-no-files-found: error
           retention-days: 2
+  release-image:
+    needs: build-sdcard-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+      - run: ls -alhR .
+      - run: gh release create test-ci-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: gh release upload test-ci-release sdcard-image-etherlab/sdcard.img
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
